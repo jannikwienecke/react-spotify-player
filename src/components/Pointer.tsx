@@ -1,7 +1,6 @@
 import React from 'react'
 import Draggable from 'react-draggable'
-import { ReturnValueUseProgressBarProps } from '../hooks/useProgressBar'
-import { PropsStylesPointer } from '../types'
+import { PropsStylesPointer, ReturnValueUseProgressBarProps } from '../types'
 import { PointerElement } from './ProgressBarPointer'
 
 export const Pointer: React.FC<{

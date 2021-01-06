@@ -1,25 +1,6 @@
 import React from 'react'
-import 'twin.macro'
 import { widthPointerElement } from '../components/ProgressBarPointer'
 import { ProgressBarProps } from '../types'
-
-export interface ReturnValueUseProgressBarProps {
-  handleClickProgressBar: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => void
-  handleDragEnd: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  handleHoverProgressBar: () => void
-  handleDragStart: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  handleDragging: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  handleMouseLeave: () => void
-  getCurrentPositionPointer: () => void
-  getWidthProgressBar: () => number
-  pointerRef: React.RefObject<HTMLDivElement>
-  progressBarRef: React.RefObject<HTMLDivElement>
-  isHoveringProgressBar: boolean
-  playbackProgress: number
-  positionPointer: number
-}
 
 export const useProgressBar = ({
   handleChange,
@@ -175,8 +156,9 @@ export const useProgressBar = ({
 
   return {
     handleClickProgressBar,
-    handleDragEnd,
     handleDragStart,
+    handleDragEnd,
+    handleDragging,
     handleHoverProgressBar,
     handleMouseLeave,
     getCurrentPositionPointer,
@@ -186,6 +168,5 @@ export const useProgressBar = ({
     progressBarRef,
     isHoveringProgressBar,
     positionPointer,
-    handleDragging,
   }
 }
