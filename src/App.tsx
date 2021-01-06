@@ -56,7 +56,7 @@ const App = () => {
 
         <div tw="text-center p-2">
           <button
-            tw="rounded-md bg-red-300 p-2 pr-4 pl-4 text-gray-600 hover:bg-gray-300 hover:text-gray-800 focus:outline-none"
+            tw="rounded-md bg-red-300 p-2 pr-4 pl-4 text-gray-600 hover:bg-red-400 hover:text-gray-800 focus:outline-none"
             onClick={() => setPlay(!play)}
           >
             {!play ? 'Play' : 'Pause'}

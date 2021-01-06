@@ -1,16 +1,16 @@
 import React from 'react'
-import { start } from 'repl'
 import 'twin.macro'
-import { ProgressBarProps } from '../components/ProgressBar'
 import { widthPointerElement } from '../components/ProgressBarPointer'
+import { ProgressBarProps } from '../types'
 
 export interface ReturnValueUseProgressBarProps {
-  handleClickProgressBar: () => void
-  handleDragEnd: () => void
+  handleClickProgressBar: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => void
+  handleDragEnd: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   handleHoverProgressBar: () => void
-  handleDragStart: () => void
-  handleDragging: () => void
-  handleMouseDownProgressBar: () => void
+  handleDragStart: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  handleDragging: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   handleMouseLeave: () => void
   getCurrentPositionPointer: () => void
   getWidthProgressBar: () => number
@@ -38,7 +38,7 @@ export const useProgressBar = ({
 
   const pointerRef = React.useRef<HTMLDivElement>(null)
   const intervallRef = React.useRef<NodeJS.Timer | undefined>()
-  const progressBarRef = React.useRef<HTMLButtonElement>(null)
+  const progressBarRef = React.useRef<HTMLDivElement>(null)
   const isDragging = React.useRef(false)
 
   const startProgressBar = progressBarRef.current?.getBoundingClientRect().left
@@ -63,8 +63,6 @@ export const useProgressBar = ({
     clearAllIntervalls()
     _handlePositionChange(event.pageX)
   }
-
-  const handleMouseDownProgressBar = () => {}
 
   const handleHoverProgressBar = () => {
     setIsHoveringProgressBar(true)
@@ -180,7 +178,6 @@ export const useProgressBar = ({
     handleDragEnd,
     handleDragStart,
     handleHoverProgressBar,
-    handleMouseDownProgressBar,
     handleMouseLeave,
     getCurrentPositionPointer,
     getWidthProgressBar,

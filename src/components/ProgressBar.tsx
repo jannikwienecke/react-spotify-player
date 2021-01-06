@@ -1,21 +1,10 @@
 import React from 'react'
-import 'twin.macro'
-import tw from 'twin.macro'
 import { useProgressBar } from '../hooks/useProgressBar'
+import { ProgressBarProps } from '../types'
 import { Pointer } from './Pointer'
 import { ProgressBarSiderContainer } from './ProgressBarSiderContainer'
 
-export interface useProgressBarProps {
-  startMs: number
-}
-
-export interface ProgressBarProps {
-  handleChange: (newMs: number) => void
-  play: boolean
-  currentMs: number
-  totalMs: number
-  mediaId: number
-}
+import '../index.css'
 
 export const Slider: React.FC<ProgressBarProps> = ({
   handleChange,
@@ -23,6 +12,9 @@ export const Slider: React.FC<ProgressBarProps> = ({
   totalMs,
   mediaId,
   currentMs,
+  stylesSlider,
+  stylesSliderProgress,
+  stylesPointer,
 }) => {
   const pB = useProgressBar({
     play,
@@ -32,27 +24,32 @@ export const Slider: React.FC<ProgressBarProps> = ({
     totalMs,
   })
 
+  const styles = {
+    ...{
+      backgroundColor: 'rgba(75, 85, 99, 1)',
+      height: '0.5rem',
+      width: '75%',
+      margin: '0 auto',
+    },
+    ...stylesSlider,
+  }
+
   return (
-    <ProgressBarWrapper
+    <div
+      className="slider-wrapper"
+      style={styles}
       ref={pB.progressBarRef}
       onClick={pB.handleClickProgressBar}
-      onMouseDown={pB.handleMouseDownProgressBar}
       onMouseOver={pB.handleHoverProgressBar}
-      // onMouseMove={pB.handleMouseMove}
       onMouseLeave={pB.handleMouseLeave}
     >
       <ProgressBarSiderContainer
         progress={pB.playbackProgress}
         hover={pB.isHoveringProgressBar}
+        stylesSliderProgress={stylesSliderProgress}
       >
-        <Pointer {...pB} />
+        <Pointer pB={pB} stylesPointer={stylesPointer} />
       </ProgressBarSiderContainer>
-    </ProgressBarWrapper>
+    </div>
   )
 }
-
-const ProgressBarWrapper = tw.button`bg-gray-600 h-2 relative focus:outline-none w-3/4 mx-auto`
-
-// const ProgressBarWrapper = () => {
-//   return <button></button>
-// }

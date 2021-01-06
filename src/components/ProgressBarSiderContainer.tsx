@@ -1,9 +1,10 @@
 import React from 'react'
-import tw, { css } from 'twin.macro'
+import { PropsStyleSliderProgress } from '../types'
 
 interface ProgressBarSiderContainerProps {
   hover: boolean
   progress: number
+  stylesSliderProgress?: PropsStyleSliderProgress
 }
 
 /**
@@ -15,19 +16,27 @@ export const ProgressBarSiderContainer: React.FC<ProgressBarSiderContainerProps>
   hover,
   children,
   progress,
+  stylesSliderProgress,
 }) => {
-  const ProgressStyles = css`
-    width: ${progress * 100}%;
-  `
+  const hoverStyles = hover
+    ? {
+        backgroundColor:
+          stylesSliderProgress?.backgroundColorOnHover || 'rgba(16, 185, 129',
+      }
+    : {}
+
+  const styles = {
+    ...{
+      width: `${progress * 100}%`,
+      height: '100%',
+      backgroundColor: '#ccc',
+    },
+    ...stylesSliderProgress,
+    ...hoverStyles,
+  }
 
   return (
-    <div
-      css={[
-        tw`relative h-full bg-blue-500 `,
-        ProgressStyles,
-        hover && tw`bg-green-400`,
-      ]}
-    >
+    <div className="slider-progress" style={{ ...styles }}>
       {children}
     </div>
   )
