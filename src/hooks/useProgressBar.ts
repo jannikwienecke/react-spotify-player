@@ -7,8 +7,9 @@ import { widthPointerElement } from '../components/ProgressBarPointer'
 export interface ReturnValueUseProgressBarProps {
   handleClickProgressBar: () => void
   handleDragEnd: () => void
-  handleDragStart: () => void
   handleHoverProgressBar: () => void
+  handleDragStart: () => void
+  handleDragging: () => void
   handleMouseDownProgressBar: () => void
   handleMouseLeave: () => void
   getCurrentPositionPointer: () => void
@@ -24,6 +25,7 @@ export const useProgressBar = ({
   handleChange,
   play,
   currentMs,
+  mediaId,
   totalMs,
 }: ProgressBarProps) => {
   const [positionPointer, setPositionPointer] = React.useState(0)
@@ -48,7 +50,9 @@ export const useProgressBar = ({
     const newDisplayPosition = getNewDisplayPositionPointer(newXValue)
     const newMsPosition = getPositionMs(newDisplayPosition)
     setPlaybackProgress(newMsPosition / totalMs)
+    clearAllIntervalls()
 
+    // RUN USER FUNCTION
     handleChange(newMsPosition)
   }
 
@@ -56,7 +60,7 @@ export const useProgressBar = ({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (isDragging.current) return
-    intervallRef.current && clearInterval(intervallRef.current)
+    clearAllIntervalls()
     _handlePositionChange(event.pageX)
   }
 
@@ -73,16 +77,35 @@ export const useProgressBar = ({
 
   const handleDragStart = () => {
     isDragging.current = true
-    intervallRef.current && clearInterval(intervallRef.current)
+
+    clearAllIntervalls()
+  }
+
+  const handleDragging = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const eventXValue = event.pageX
+
+    isDragging.current = true
+    clearAllIntervalls()
+
+    if (startProgressBar === undefined) return
+
+    const newXValue = eventXValue - startProgressBar
+
+    const newDisplayPosition = getNewDisplayPositionPointer(newXValue)
+    const newMsPosition = getPositionMs(newDisplayPosition)
+
+    // WHEN DRAGGING ONLY UPDATE THE POINTER
+    // OTHERWISE POINTER JUMPS BACk AND FORTH
+    setPositionPointer((newMsPosition / totalMs) * getWidthProgressBar())
   }
 
   const handleDragEnd = async (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     setIsHoveringProgressBar(false)
-    setTimeout(() => {
-      isDragging.current = false
-    }, 0)
+    isDragging.current = false
 
     _handlePositionChange(event.pageX)
   }
@@ -102,16 +125,18 @@ export const useProgressBar = ({
   }, [currentMs])
 
   React.useEffect(() => {
-    if (!play && intervallRef.current) {
-      clearInterval(intervallRef.current)
+    setPlaybackProgress(0)
+    clearAllIntervalls()
+    startIntervall()
+  }, [mediaId])
+
+  React.useEffect(() => {
+    if (!play) {
+      clearAllIntervalls()
     } else {
       startIntervall()
     }
   }, [play])
-
-  // React.useEffect(() => {
-  //   intervallRef.current && clearInterval(intervallRef.current)
-  // }, [playbackProgress])
 
   const getWidthProgressBar = () => {
     if (!progressBarRef.current) return 0
@@ -136,10 +161,14 @@ export const useProgressBar = ({
     return eventXValue - widthPointerElement / 2
   }
 
-  const startIntervall = () => {
-    intervallRef.current = setInterval(() => {
-      console.log('hier')
+  const clearAllIntervalls = () => {
+    for (var i = 1; i < 999; i++) clearInterval(i)
+  }
 
+  const startIntervall = () => {
+    if (!play) return
+
+    intervallRef.current = setInterval(() => {
       setPlaybackProgress((position: number) => {
         return position + 1 / totalMs
       })
@@ -160,5 +189,6 @@ export const useProgressBar = ({
     progressBarRef,
     isHoveringProgressBar,
     positionPointer,
+    handleDragging,
   }
 }

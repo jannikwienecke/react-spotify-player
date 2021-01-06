@@ -12,6 +12,7 @@ export const Pointer: React.FC<ReturnValueUseProgressBarProps> = props => {
       position={{ x: props.positionPointer, y: 0 }}
       onStart={props.handleDragStart}
       onStop={props.handleDragEnd}
+      onDrag={props.handleDragging}
     >
       <div className="handle" ref={props.pointerRef}>
         <PointerElement hover={props.isHoveringProgressBar} />

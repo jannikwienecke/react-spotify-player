@@ -14,15 +14,23 @@ export interface ProgressBarProps {
   play: boolean
   currentMs: number
   totalMs: number
+  mediaId: number
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const Slider: React.FC<ProgressBarProps> = ({
   handleChange,
   play,
   totalMs,
+  mediaId,
   currentMs,
 }) => {
-  const pB = useProgressBar({ play, handleChange, currentMs, totalMs })
+  const pB = useProgressBar({
+    play,
+    handleChange,
+    currentMs,
+    mediaId,
+    totalMs,
+  })
 
   return (
     <ProgressBarWrapper
