@@ -1,0 +1,12 @@
+.slider-pointer:focus {
+  outline: none;
+}
+
+.slider-progress:focus {
+  outline: none;
+}
+
+.slider-wrapper {
+  cursor: pointer;
+  outline: none;
+}

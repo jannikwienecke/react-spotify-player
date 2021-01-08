@@ -987,6 +987,24 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@bit/jannikwienecke.personal.react-slider-types@0.0.6":
+  version "0.0.6"
+  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider-types/-/jannikwienecke.personal.react-slider-types-0.0.6.tgz#c626ba791a1fa236a6fa4530080b3778d983e238"
+  integrity sha1-xia6eRofojam+kUwCAs3eNmD4jg=
+
+"@bit/jannikwienecke.personal.react-slider@file:./components/react-slider":
+  version "0.0.8"
+  dependencies:
+    "@bit/jannikwienecke.personal.react-slider-types" "0.0.6"
+    "@bit/jannikwienecke.personal.use-progress-bar" "0.0.7"
+
+"@bit/jannikwienecke.personal.use-progress-bar@0.0.7":
+  version "0.0.7"
+  resolved "https://node.bit.dev/jannikwienecke.personal.use-progress-bar/-/jannikwienecke.personal.use-progress-bar-0.0.7.tgz#617e9270f4e01d987397cb62582546be9580f2d9"
+  integrity sha1-YX6ScPTgHZhzl8tiWCVGvpWA8tk=
+  dependencies:
+    "@bit/jannikwienecke.personal.react-slider-types" "0.0.6"
+
 "@emotion/babel-plugin-jsx-pragmatic@^0.1.5":
   version "0.1.5"
   resolved "https://registry.npmjs.org/@emotion/babel-plugin-jsx-pragmatic/-/babel-plugin-jsx-pragmatic-0.1.5.tgz"
@@ -1262,7 +1280,7 @@
 
 "@types/jest@^26.0.19":
   version "26.0.19"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-26.0.19.tgz"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.19.tgz#e6fa1e3def5842ec85045bd5210e9bb8289de790"
   integrity sha512-jqHoirTG61fee6v6rwbnEuKhpSKih0tuhqeFbCmMmErhtu3BYlOZaXWjffgOstMM4S/3iQD31lI5bGLTrs97yQ==
   dependencies:
     jest-diff "^26.0.0"
@@ -1275,7 +1293,7 @@
 
 "@types/node@*", "@types/node@^14.14.20":
   version "14.14.20"
-  resolved "https://registry.npmjs.org/@types/node/-/node-14.14.20.tgz"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.20.tgz#f7974863edd21d1f8a494a73e8e2b3658615c340"
   integrity sha512-Y93R97Ouif9JEOWPIUyU+eyIdyRqQR0I8Ez1dzku4hDx34NWh4HbtIc3WNzwB1Y9ULvNGeu5B8h8bVL5cAk4/A==
 
 "@types/parse-json@^4.0.0":
@@ -1295,14 +1313,14 @@
 
 "@types/react-dom@^17.0.0":
   version "17.0.0"
-  resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-17.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.0.tgz#b3b691eb956c4b3401777ee67b900cb28415d95a"
   integrity sha512-lUqY7OlkF/RbNtD5nIq7ot8NquXrdFrjSOR6+w9a9RFQevGi1oZO1dcJbXMeONAPKtZ2UrZOEJ5UOCVsxbLk/g==
   dependencies:
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^17.0.0":
   version "17.0.0"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.0.tgz#5af3eb7fad2807092f0046a1302b7823e27919b8"
   integrity sha512-aj/L7RIMsRlWML3YB6KZiXB3fV2t41+5RBGYF8z+tAKU43Px8C3cYUZsDvf1/+Bm4FK21QWBrDutu8ZJ/70qOw==
   dependencies:
     "@types/prop-types" "*"
@@ -1800,7 +1818,7 @@ babel-plugin-transform-define@2.0.0:
 
 babel-plugin-transform-inline-environment-variables@^0.4.3:
   version "0.4.3"
-  resolved "https://registry.npmjs.org/babel-plugin-transform-inline-environment-variables/-/babel-plugin-transform-inline-environment-variables-0.4.3.tgz"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-inline-environment-variables/-/babel-plugin-transform-inline-environment-variables-0.4.3.tgz#a3b09883353be8b5e2336e3ff1ef8a5d93f9c489"
   integrity sha1-o7CYgzU76LXiM24/8e+KXZP5xIk=
 
 babel-plugin-transform-react-remove-prop-types@0.4.24:
@@ -7476,7 +7494,7 @@ typedarray@^0.0.6:
 
 typescript@^4.1.3:
   version "4.1.3"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-4.1.3.tgz"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.3.tgz#519d582bd94cba0cf8934c7d8e8467e473f53bb7"
   integrity sha512-B3ZIOf1IKeH2ixgHhj6la6xdwR9QrLC5d1VKeCSY4tvkqhF2eqd9O7txNlS0PO3GrBAFIdr3L1ndNwteUbZLYg==
 
 uncss@^0.17.3:

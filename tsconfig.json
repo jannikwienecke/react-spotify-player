@@ -20,5 +20,5 @@
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"],
-  "files": ["twin.d.ts", "./src/components/Pointer.tsx"]
+  "files": ["twin.d.ts"]
 }

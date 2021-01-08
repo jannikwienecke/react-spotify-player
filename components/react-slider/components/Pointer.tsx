@@ -1,11 +1,11 @@
-import React from 'react'
-import Draggable from 'react-draggable'
-import { PropsStylesPointer, ReturnValueUseProgressBarProps } from '../types'
-import { PointerElement } from './ProgressBarPointer'
+import React from "react";
+import Draggable from "react-draggable";
+import { PropsStylesPointer, ReturnValueUseProgressBarProps } from "../types";
+import { PointerElement } from "./ProgressBarPointer";
 
 export const Pointer: React.FC<{
-  pB: ReturnValueUseProgressBarProps
-  stylesPointer?: PropsStylesPointer
+  pB: ReturnValueUseProgressBarProps;
+  stylesPointer?: PropsStylesPointer;
 }> = ({ pB, stylesPointer }) => {
   return (
     <Draggable
@@ -24,5 +24,5 @@ export const Pointer: React.FC<{
         />
       </div>
     </Draggable>
-  )
-}
+  );
+};
