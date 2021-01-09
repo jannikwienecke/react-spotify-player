@@ -1,18 +1,37 @@
+import React from 'react'
 import { useSlider } from '../../components/react-slider'
+import { useCurrentSong } from './useCurrentSong'
+import { usePlay } from './usePlay'
+import { useSeekPosition } from './useSeekPosition'
 
 export const useSpotifyPlayer = () => {
-  const handleMsChange = (ms: number) => {
-    return new Promise<number>(res => {
-      res(ms)
-    })
-  }
+  // const [songInfo, setSongInfo] = React.useState<
+  //   SpotifyApi.CurrentPlaybackResponse
+  // >()
+  // const [seekPosition, setSeekPosition] = React.useState<number>()
 
-  const slider = useSlider(handleMsChange)
+  const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
+  // const { play } = usePlay({ deviceId: currentDeviceId })
 
+  // SETS NEW CURRENTDEVICE WHEN CHANGED OR WHEN LOADED AT THE START
   const handleClickPlay = () => {
-    console.log('slider.play change to ', !slider.play)
-    slider.setPlay(!slider.play)
+    // console.log('slider.play change to ', !slider.play)
+    // slider.setPlay(!slider.play)
   }
 
-  return { handleClickPlay, ...slider }
+  // React.useEffect(() => {
+  //   if (!currentSong?.progress_ms) return
+
+  //   if (seekPosition && seekPosition !== currentSong.progress_ms) return
+
+  //   console.log('set current song...', currentSong.progress_ms)
+
+  //   setSongInfo(currentSong)
+  // }, [currentSong?.progress_ms])
+
+  return {
+    currentSong,
+    handleClickPlay,
+    fetchCurrentSong,
+  }
 }

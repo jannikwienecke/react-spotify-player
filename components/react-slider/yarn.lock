@@ -176,17 +176,15 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@bit/jannikwienecke.personal.react-slider-types@0.0.6":
-  version "0.0.6"
-  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider-types/-/jannikwienecke.personal.react-slider-types-0.0.6.tgz#c626ba791a1fa236a6fa4530080b3778d983e238"
-  integrity sha1-xia6eRofojam+kUwCAs3eNmD4jg=
+"@bit/jannikwienecke.personal.react-slider-types@0.0.2":
+  version "0.0.2"
+  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider-types/-/jannikwienecke.personal.react-slider-types-0.0.2.tgz#46d2ba59f60835a3b0d3c6d2325badaee1ecbf64"
+  integrity sha1-RtK6WfYINaOw08bSMlutruHsv2Q=
 
-"@bit/jannikwienecke.personal.use-progress-bar@0.0.7":
-  version "0.0.7"
-  resolved "https://node.bit.dev/jannikwienecke.personal.use-progress-bar/-/jannikwienecke.personal.use-progress-bar-0.0.7.tgz#617e9270f4e01d987397cb62582546be9580f2d9"
-  integrity sha1-YX6ScPTgHZhzl8tiWCVGvpWA8tk=
-  dependencies:
-    "@bit/jannikwienecke.personal.react-slider-types" "0.0.6"
+"@bit/jannikwienecke.personal.use-previous@0.0.1":
+  version "0.0.1"
+  resolved "https://node.bit.dev/jannikwienecke.personal.use-previous/-/jannikwienecke.personal.use-previous-0.0.1.tgz#d91c47c15ffc4dd2ac224b59ee9d611cad997627"
+  integrity sha1-2RxHwV/8TdKsIktZ7p1hHK2Zdic=
 
 "@types/prop-types@*":
   version "15.7.3"
@@ -244,9 +242,9 @@ convert-source-map@^1.7.0:
     safe-buffer "~5.1.1"
 
 csstype@^3.0.2:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.5.tgz#7fdec6a28a67ae18647c51668a9ff95bb2fa7bb8"
-  integrity sha512-uVDi8LpBUKQj6sdxNaTetL6FpeCqTjOvAQuQUa/qAqq8oOd4ivkbhgnqayl0dnPal8Tb/yB1tF+gOvCBiicaiQ==
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.6.tgz#865d0b5833d7d8d40f4e5b8a6d76aea3de4725ef"
+  integrity sha512-+ZAmfyWMT7TiIlzdqJgjMb7S4f1beorDbWbsocyK4RaiqA5RTX3K14bnBWmmA9QEM0gRdsjyyrEmcyga8Zsxmw==
 
 debug@^4.1.0:
   version "4.3.1"

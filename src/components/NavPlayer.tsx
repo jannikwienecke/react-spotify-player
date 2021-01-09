@@ -6,7 +6,7 @@ import { ControlWrapperInner } from './ControlWrapperInner'
 import { ControlWrapperOuter } from './ControlWrapperOuter'
 import { WrapperControl } from './WrapperControl'
 import { WrapperMainPlayer } from './WrapperMainPlayer'
-import { WrapperPlaterSettings } from './WrapperPlaterSettings'
+import { SpotifyPlayerSettings } from './SpotifyPlayerSettings'
 import { WrapperPlayerMain } from './WrapperPlayerMain'
 import { WrapperProgressBar } from './WrapperProgressBar'
 import { WrapperTrackInfo } from './WrapperTrackInfo'
@@ -23,11 +23,13 @@ import { useSpotifyPlayer } from '../hooks/useSpotifyPlayer'
 const logoHeight = '15px'
 const logoWidth = '15px'
 const SpotifyPlayer = () => {
-  const { handleClickPlay, onChange, play, currentMs } = useSpotifyPlayer()
+  const { handleClickPlay, currentSong, fetchCurrentSong } = useSpotifyPlayer()
 
   return (
     <WrapperPlayerMain>
-      <WrapperTrackInfo>Track Info</WrapperTrackInfo>
+      <WrapperTrackInfo tw="text-white">
+        {currentSong?.item?.name}
+      </WrapperTrackInfo>
 
       <WrapperMainPlayer>
         <WrapperControl>
@@ -59,7 +61,7 @@ const SpotifyPlayer = () => {
             <ControlWrapperInner>
               <ControlButtonPrimary onClick={handleClickPlay}>
                 <img
-                  src={!play ? plagImg : pauseImg}
+                  src={!currentSong?.is_playing ? plagImg : pauseImg}
                   alt="play"
                   height={logoHeight}
                   width={logoWidth}
@@ -95,14 +97,13 @@ const SpotifyPlayer = () => {
 
         <WrapperProgressBar>
           <MusicSlider
-            play={play}
-            currentMs={currentMs}
-            handleChange={onChange}
+            currentSong={currentSong}
+            fetchCurrentSong={fetchCurrentSong}
           />
         </WrapperProgressBar>
       </WrapperMainPlayer>
 
-      <WrapperPlaterSettings>Settings</WrapperPlaterSettings>
+      <SpotifyPlayerSettings />
     </WrapperPlayerMain>
   )
 }

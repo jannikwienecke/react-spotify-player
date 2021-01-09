@@ -1,16 +1,16 @@
 {
   "name": "@bit/jannikwienecke.personal.react-slider",
-  "version": "0.0.8",
+  "version": "0.0.7",
   "homepage": "https://bit.dev/jannikwienecke/personal/react-slider",
   "main": "dist/index.js",
   "componentId": {
     "scope": "jannikwienecke.personal",
     "name": "react-slider",
-    "version": "0.0.8"
+    "version": "0.0.5"
   },
   "dependencies": {
-    "@bit/jannikwienecke.personal.react-slider-types": "0.0.6",
-    "@bit/jannikwienecke.personal.use-progress-bar": "file:../use-progress-bar"
+    "@bit/jannikwienecke.personal.react-slider-types": "0.0.2",
+    "@bit/jannikwienecke.personal.use-previous": "0.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
