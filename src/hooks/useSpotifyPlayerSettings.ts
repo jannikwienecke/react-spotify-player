@@ -4,7 +4,8 @@ import { useSpotify } from './useInitialSpotify'
 import { usePlayer } from './usePlayer'
 
 export const TEMP_TOkEN =
-  'BQCrE3Z1cihZYmch-8VvFtK7-m4gk7hdqUqIGeci87CEiACPy9YasnRYRgeSgT0QeuDgX87A33bkjaylTZljf0GYgPexyqPoha00t--PyqEcuDPAYXYWthkP5n0nbUgZo0u0zKuLujbRVY4NzgzeJkN2XMi3EsOQQaRqdAkGCABQ4l_RNKN9gUwSGMgXi2-78RGeY8FuA-vE_9pclsd0JvGaXvJqORxXEBnOveHUug-kis5pnt6SBGfCANgCsy4kpfWUJAq0enjOJQ'
+  'BQDpS1B3CK8eA2BC5vzhymaM0t5UMC6W0VyVxPozQxmih629_52hF-cpC_Ww30VQ34vK6kQyMBSz5BI4zu4933cgC8Cl6Hn8J_ZvdklKLnZBj5TqP6aA8yKkkcwUW7zEquedDSsEO9n3KmHlyhI_S8pVUEBo9f9bzeAnpRTrMh00kKiuxf4TBkD_lWaO147l1IT6Dsr6HeIJIDkuAiY9O1ReIbphfRGluo0MTT0OakRj6GKFs6Miv9cdhZeVtMaReFVxItnO7ZUjXg'
+
 export const useSpotifyPlayerSettings = () => {
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>()
 
