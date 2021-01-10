@@ -1,26 +1,81 @@
 import React from "react";
+import { useMediaState } from "./useMediaState";
+import { PropsUseStateRef, useStateRef } from "./useStateRef";
+import { useUpdateIntervall } from "./useUpdateIntervall";
+import { useChangesHandler } from "./useChangesHandler";
 
-export const useSlider = (onChangeCallBack: (ms: number) => void) => {
-  const [play, setPlay] = React.useState(false);
-  const [currentMs, setCurrentMs] = React.useState(0);
-  const [media, setMedia] = React.useState({ mediaId: 1, totalMs: 200000 });
+export type Status = "idle" | "loading" | "success" | "error" | undefined;
 
-  const onChange = React.useCallback(async (ms: number) => {
-    try {
-      await onChangeCallBack(ms);
-      return ms;
-    } catch (error) {
-      return Promise.reject("ERROR");
+interface PropsUseMusicSlider extends PropsUseStateRef {
+  onSettledChange: () => void;
+  onMsChange: (ms: number) => void;
+  onEnd?: () => void;
+  statusRequestMsChange: Status;
+  stateUpdateIntervall?: number;
+}
+
+export type Media = {
+  mediaId: number;
+  totalMs: number;
+};
+
+export const useSlider = ({
+  isPlaying,
+  currentMsSong,
+  media,
+  stateUpdateIntervall,
+  onSettledChange,
+  onMsChange,
+  onEnd,
+  statusRequestMsChange,
+}: PropsUseMusicSlider) => {
+  const changedMs = React.useRef<undefined | number>();
+
+  const stateRef = useStateRef({
+    isPlaying,
+    currentMsSong,
+    media,
+  });
+  const { state, updateState, updateSelectedState } = useMediaState(stateRef);
+
+  const { stateUpdateRef, startIntervall } = useUpdateIntervall({
+    updateState,
+    stateUpdateIntervall: stateUpdateIntervall || 3000,
+  });
+
+  useChangesHandler({
+    isPlaying,
+    media,
+    updateSelectedState,
+    updateState,
+    statusRequestMsChange,
+    onSettledChange,
+    changedMs,
+  });
+
+  const handleMsChange = (ms: number) => {
+    clearInterval(stateUpdateRef.current);
+    stateUpdateRef.current = undefined;
+
+    onMsChange(ms);
+
+    changedMs.current = ms;
+
+    if (!stateUpdateRef.current) {
+      startIntervall();
     }
+  };
+
+  const handleEnd = React.useCallback(() => {
+    onEnd && onEnd();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return {
-    play,
-    setPlay,
-    currentMs,
-    setCurrentMs,
-    setMedia,
-    media,
-    onChange,
-  };
+
+  const handleDragStart = React.useCallback(() => {
+    clearInterval(stateUpdateRef.current);
+    stateUpdateRef.current = undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { state, handleMsChange, handleDragStart, handleEnd };
 };

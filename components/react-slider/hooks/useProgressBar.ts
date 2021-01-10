@@ -6,8 +6,8 @@ import { usePrevious } from './usePrevious'
 export let widthPointerElement = 15
 
 export const useProgressBar = ({
-  handleChange,
-  handleDragStart: tellUserDragStart,
+  onChange,
+  onDragStart,
   onEnd,
   state,
 }: ProgressBarProps) => {
@@ -47,13 +47,7 @@ export const useProgressBar = ({
 
     clearAllIntervalls()
 
-    if (!handleChange) {
-      console.warn('Please Provide a handleChange Function')
-      return
-    }
-
-    // RUN USER FUNCTION
-    handleChange(newMsPosition)
+    onChange(newMsPosition)
   }
 
   // ==== HANDLE MOUSE CLICk AND HOVER =========
@@ -77,7 +71,7 @@ export const useProgressBar = ({
   // ========== DRAGGING HANDLER =============
   const handleDragStart = () => {
     isDragging.current = true
-    tellUserDragStart()
+    onDragStart()
     clearAllIntervalls()
   }
 
@@ -119,7 +113,7 @@ export const useProgressBar = ({
       if (playbackProgress.toFixed(2) === '1.00') {
         clearAllIntervalls()
         // USER FUNCTION
-        onEnd()
+        onEnd && onEnd()
       } else setPositionPointer(playbackProgress * getWidthProgressBar())
     }
   }, [playbackProgress, onEnd])
@@ -153,6 +147,8 @@ export const useProgressBar = ({
   // ========== START INTERVAL FOR SETTING THE POSITION ======
   // ========== OF THE POINTER AND PROGRESS ==================
   const startIntervall = React.useCallback(() => {
+    console.log('start.....')
+
     if (!play) return
 
     clearInterval(intervallRef.current)
@@ -161,11 +157,13 @@ export const useProgressBar = ({
       setPlaybackProgress((position: number) => {
         const currentMsValue = position * totalMs
         const newProcent = (currentMsValue + 50) / totalMs
+        // console.log('currentMsValue', currentMsValue)
 
         return newProcent
       })
     }, 50)
   }, [totalMs, play])
+
   //===================END INTEVALL===========================
 
   //============ CLEAR INTERVALL ==========

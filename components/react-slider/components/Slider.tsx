@@ -13,8 +13,8 @@ import "./Slider.css";
 
 // * @param handleChange: Must Return a promise containing the ms that is send to the media service
 const Slider: React.FC<ProgressBarProps> = ({
-  handleChange,
-  handleDragStart,
+  onChange,
+  onDragStart,
   onEnd,
   state,
   stylesSlider,
@@ -22,8 +22,8 @@ const Slider: React.FC<ProgressBarProps> = ({
   stylesPointer,
 }) => {
   const pB = useProgressBar({
-    handleChange,
-    handleDragStart,
+    onChange,
+    onDragStart,
     onEnd,
     state,
   });

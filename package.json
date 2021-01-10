@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.0.0-0",
+    "@bit/jannikwienecke.personal.react-slider": "file:./components/react-slider",
     "@bit/jannikwieneckej.personal.react-slider": "file:./components/react-slider",
     "@emotion/babel-plugin-jsx-pragmatic": "^0.1.5",
     "@emotion/react": "^11.1.4",
@@ -33,11 +34,11 @@
     "tailwindcss": "^2.0.1",
     "twin.macro": "^2.0.1",
     "typescript": "^4.1.3",
-    "utils": "^0.3.1",
-    "@bit/jannikwienecke.personal.react-slider": "file:./components/react-slider"
+    "utils": "^0.3.1"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.12.7",
+    "babel-plugin-typescript-to-proptypes": "^1.4.2",
     "next": "^10.0.4",
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.1.2"

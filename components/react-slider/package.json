@@ -1,15 +1,15 @@
 {
   "name": "@bit/jannikwienecke.personal.react-slider",
-  "version": "0.0.7",
+  "version": "0.1.4",
   "homepage": "https://bit.dev/jannikwienecke/personal/react-slider",
   "main": "dist/index.js",
   "componentId": {
     "scope": "jannikwienecke.personal",
     "name": "react-slider",
-    "version": "0.0.5"
+    "version": "0.1.3"
   },
   "dependencies": {
-    "@bit/jannikwienecke.personal.react-slider-types": "0.0.2",
+    "@bit/jannikwienecke.personal.react-slider-types": "0.1.2",
     "@bit/jannikwienecke.personal.use-previous": "0.0.1"
   },
   "devDependencies": {

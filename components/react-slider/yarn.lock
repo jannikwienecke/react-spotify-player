@@ -176,10 +176,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@bit/jannikwienecke.personal.react-slider-types@0.0.2":
-  version "0.0.2"
-  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider-types/-/jannikwienecke.personal.react-slider-types-0.0.2.tgz#46d2ba59f60835a3b0d3c6d2325badaee1ecbf64"
-  integrity sha1-RtK6WfYINaOw08bSMlutruHsv2Q=
+"@bit/jannikwienecke.personal.react-slider-types@0.1.2":
+  version "0.1.2"
+  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider-types/-/jannikwienecke.personal.react-slider-types-0.1.2.tgz#a53a76527369743e076f02154bb19969e1994fea"
+  integrity sha1-pTp2UnNpdD4HbwIVS7GZaeGZT+o=
 
 "@bit/jannikwienecke.personal.use-previous@0.0.1":
   version "0.0.1"
