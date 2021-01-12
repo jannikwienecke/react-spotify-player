@@ -1,9 +1,5 @@
-import { SPOTIFY_PLAYER_NAME } from 'app/spotifyConfig'
-import { useDevices } from './useDevices'
 import { useSpotifyMutation } from './useSpotify'
 import React from 'react'
-import _ from 'lodash'
-import { TrackPagingObject } from './useTopArtistsTracks'
 
 interface UsePlayInterface {
   deviceId: string | undefined

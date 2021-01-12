@@ -44,7 +44,7 @@ const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 const COUNTRY_CODE = 'US'
 
-const SPOTIFY_PLAYER_NAME = 'player_playlist_design'
+const SPOTIFY_PLAYER_NAME = 'spotify_playlist_design'
 export {
   SPOTIFY_PLAYER_NAME,
   SPOTIFY_AUTH_URL,

@@ -4,7 +4,7 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "jsx": "preserve",
     "lib": ["dom", "es2017"],
     "module": "esnext",
@@ -20,5 +20,10 @@
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"],
-  "files": ["twin.d.ts"]
+  "files": [
+    "twin.d.ts",
+    "./src/components/DeviceListBox.tsx",
+    "./src/components/useDeviceListBox.tsx",
+    "./src/components/VolumeSlider.tsx"
+  ]
 }

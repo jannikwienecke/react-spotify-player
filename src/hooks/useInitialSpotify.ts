@@ -1,13 +1,19 @@
+// @ts-nocheck
 import React from 'react'
+import { SPOTIFY_PLAYER_NAME } from '../spotifyConfig'
 
 declare global {
   interface Window {
     onSpotifyWebPlaybackSDKReady: any
   }
+  interface Spotify {
+    Player: any
+  }
 }
 
 export const useSpotify = (token: string) => {
   const [deviceId, setDeviceId] = React.useState()
+  const [spotifyContext, setSpotifyContext] = React.useState()
 
   React.useEffect(() => {
     const script = document.createElement('script')
@@ -17,7 +23,7 @@ export const useSpotify = (token: string) => {
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new Spotify.Player({
-        name: 'Web Player - Playlist-Designer',
+        name: SPOTIFY_PLAYER_NAME,
         getOAuthToken: (cb: (token: string) => void) => {
           cb(token)
         },
@@ -27,36 +33,30 @@ export const useSpotify = (token: string) => {
       player.addListener(
         'initialization_error',
         ({ message }: { message: string }) => {
-          console.error(message)
+          console.error('initialization_error: ', message)
         },
       )
       player.addListener(
         'authentication_error',
         ({ message }: { message: string }) => {
-          console.error(message)
+          console.error('authentication_error: ', message)
         },
       )
       player.addListener(
         'account_error',
         ({ message }: { message: string }) => {
-          console.error(message)
+          console.error('account_error', message)
         },
       )
       player.addListener(
         'playback_error',
         ({ message }: { message: string }) => {
-          console.error(message)
+          console.error('playback_error', message)
         },
       )
 
-      // Playback status updates
-      player.addListener('player_state_changed', (state: any) => {
-        console.log(state)
-      })
-
       // Ready
       player.addListener('ready', ({ device_id }: any) => {
-        console.log('Ready with Device ID', device_id)
         setDeviceId(device_id)
       })
 

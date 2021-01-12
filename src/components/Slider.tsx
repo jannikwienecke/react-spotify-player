@@ -1,8 +1,6 @@
 import React from 'react'
 import { useSeekPosition } from '../hooks/useSeekPosition'
-import { useSlider } from '../../components/react-slider/hooks/useSlider'
-import Slider from '../../components/react-slider/components/Slider'
-
+import Slider, { useSlider } from '@bit/jannikwienecke.personal.react-slider'
 interface MusicSliderProps {
   currentSong: SpotifyApi.CurrentPlaybackResponse | undefined
   fetchCurrentSong: () => void
@@ -37,13 +35,14 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
     stateUpdateIntervall: 5000,
   })
 
-  if (!currentSong) return null
+  // if (!currentSong) return null
   return (
     <Slider
       state={state}
       onDragStart={handleDragStart}
       onEnd={handleEnd}
       onChange={handleMsChange}
+      stylesSlider={{ height: '6px' }}
     />
   )
 }

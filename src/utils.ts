@@ -4,6 +4,7 @@ interface PropsClient {
   token: string
   data?: {} | undefined
   method?: 'GET' | 'POST' | 'PUT'
+  config?: {} | undefined
 }
 async function client({
   endpoint,

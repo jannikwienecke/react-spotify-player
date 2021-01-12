@@ -11,8 +11,8 @@ export function useClient() {
   let { token } = useSpotifyToken()
 
   return React.useCallback(
-    (endpoint, config: QueryConfig | undefined = undefined) => {
-      return client({ endpoint, token })
+    (endpoint, config: QueryConfig) => {
+      return client({ endpoint, token, config })
     },
     [token],
   )

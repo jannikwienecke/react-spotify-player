@@ -1,5 +1,4 @@
 import { useSpotify } from './useSpotify'
-import React from 'react'
 import { refetchIntervall } from '../spotifyConfig'
 
 export const useDevices = () => {

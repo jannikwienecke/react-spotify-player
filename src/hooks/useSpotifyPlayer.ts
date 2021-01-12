@@ -1,8 +1,4 @@
-import React from 'react'
-import { useSlider } from '../../components/react-slider'
 import { useCurrentSong } from './useCurrentSong'
-import { usePlay } from './usePlay'
-import { useSeekPosition } from './useSeekPosition'
 
 export const useSpotifyPlayer = () => {
   // const [songInfo, setSongInfo] = React.useState<
