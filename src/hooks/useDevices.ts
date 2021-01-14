@@ -1,5 +1,5 @@
 import { useSpotify } from './useSpotify'
-import { refetchIntervall } from '../spotifyConfig'
+import { refetchIntervall, SPOTIFY_PLAYER_NAME } from '../spotifyConfig'
 
 export const useDevices = () => {
   const url = 'me/player/devices'
@@ -9,5 +9,17 @@ export const useDevices = () => {
     refetchInterval: refetchIntervall,
   })
 
-  return { refetch, ...result }
+  const getActiveDevice = () => {
+    const devices = result.data?.devices
+    if (!devices) return undefined
+
+    let activeDevice = devices.find(device => device.is_active)
+    if (!activeDevice) {
+      activeDevice = devices.find(device => device.name === SPOTIFY_PLAYER_NAME)
+    }
+
+    return activeDevice
+  }
+
+  return { refetch, ...result, activeDevice: getActiveDevice() }
 }

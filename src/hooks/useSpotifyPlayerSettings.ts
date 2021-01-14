@@ -4,7 +4,7 @@ import { useSpotify } from './useInitialSpotify'
 import { usePlayer } from './usePlayer'
 
 export const TEMP_TOkEN =
-  'BQCN9K510I7dKdlJtlQF8XT9OKHrQYUVq7MBjvczqVbe0ZnsBbb0LEi7ziIYXQ_crduvx9WQrsuwoeX2g975YhwowHLFYr_lnOz0EKlcIsuDZjrn8k9cLu_iEhMLnHZbe36_g92MeCDVkftJ39EPaNThF-hTk6XosIXAek5TTP8aYfaRtmCCOwuG2xskRaEs_QhIr-SJ99Dp1GYfPk5m57zGDDu25AVhm6tYyDp5xviwvbfkkgQYNI5GCp_SdSZVyihxW-aGX-E9SQ'
+  'BQAqkHN_lQlCnwHNdomDX4CK6FMiae-lMkKoK-Tl5eOPX0vpGT9rs1QWooWue9b5rAIF6gicy1Ra5tsUoFkrkyHQYp6IsZWW8xtnoTa4b1lvPGApB-S51ve3QX0voaJlfQZ7wNJM6JvGqvcs5e9uJnmDDPSHQ1mHWW6Af-RnUfZD499GjdWia-zkvsurxfkPVx_wF7x4MaVvHXNwHJFFHABVusSrnSja-5OkTPIfc2NP-8dGHAuwhBKja6RgRtdM4qmNM10Q3w87WA'
 export const useSpotifyPlayerSettings = () => {
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>()
 
@@ -26,7 +26,7 @@ export const useSpotifyPlayerSettings = () => {
     transferPlaybackToDevices([deviceId])
     setTimeout(() => {
       refetch()
-    }, 1000)
+    }, 10000)
   }, [])
 
   return {

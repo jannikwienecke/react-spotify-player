@@ -1,12 +1,11 @@
 import { useSpotifyMutation } from './useSpotify'
 import React from 'react'
+import { useDevices } from './useDevices'
 
-interface UsePlayInterface {
-  deviceId: string | undefined
-}
-export const usePlay = ({ deviceId }: UsePlayInterface) => {
+export const usePlay = () => {
   const [url, setUrl] = React.useState<string>('')
   const [uris, setUris] = React.useState<string[] | undefined>()
+  const { activeDevice } = useDevices()
 
   const { mutate, error, ...result } = useSpotifyMutation<null>({
     url,
@@ -15,20 +14,21 @@ export const usePlay = ({ deviceId }: UsePlayInterface) => {
 
   React.useEffect(() => {
     if (url && uris) {
-      console.log('play...', url)
-
       mutate({ uris })
     }
   }, [url, mutate, uris])
 
-  const play = React.useCallback((uris: string[]) => {
-    if (!deviceId) return
+  const play = React.useCallback(
+    (uris: string[]) => {
+      if (!activeDevice) return
 
-    const newUrl = deviceId ? `me/player/play?device_id=${deviceId}` : ''
+      const newUrl = `me/player/play?device_id=${activeDevice.id}`
 
-    setUrl(newUrl)
-    setUris(uris)
-  }, [])
+      setUrl(newUrl)
+      setUris(uris)
+    },
+    [activeDevice],
+  )
 
   React.useEffect(() => {
     let err: any = error

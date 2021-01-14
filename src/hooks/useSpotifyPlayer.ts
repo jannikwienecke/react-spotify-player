@@ -1,4 +1,6 @@
+import React from 'react'
 import { useCurrentSong } from './useCurrentSong'
+import { useQueueStore } from './useQueueStore'
 
 export const useSpotifyPlayer = () => {
   // const [songInfo, setSongInfo] = React.useState<
@@ -7,6 +9,7 @@ export const useSpotifyPlayer = () => {
   // const [seekPosition, setSeekPosition] = React.useState<number>()
 
   const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
+  const { queue } = useQueueStore()
   // const { play } = usePlay({ deviceId: currentDeviceId })
 
   // SETS NEW CURRENTDEVICE WHEN CHANGED OR WHEN LOADED AT THE START
@@ -25,9 +28,14 @@ export const useSpotifyPlayer = () => {
   //   setSongInfo(currentSong)
   // }, [currentSong?.progress_ms])
 
+  React.useEffect(() => {
+    console.log('queue', queue)
+  }, [queue])
+
   return {
     currentSong,
     handleClickPlay,
     fetchCurrentSong,
+    queue,
   }
 }

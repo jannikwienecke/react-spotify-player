@@ -24,6 +24,10 @@
     "twin.d.ts",
     "./src/components/DeviceListBox.tsx",
     "./src/components/useDeviceListBox.tsx",
-    "./src/components/VolumeSlider.tsx"
+    "./src/components/VolumeSlider.tsx",
+    "./src/components/SongImagePlayer.tsx",
+    "./src/components/SpotifySongInfoHeart.tsx",
+    "./src/hooks/useQueue.ts",
+    "./src/components/SpotifySongInfoRadio.tsx"
   ]
 }

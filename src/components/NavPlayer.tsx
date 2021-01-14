@@ -19,18 +19,23 @@ import repeatImg from '../public/repeat.png'
 import shuffleImg from '../public/shuffle.png'
 import { MusicSlider } from './Slider'
 import { useSpotifyPlayer } from '../hooks/useSpotifyPlayer'
+import SpotifySongInfo from './SpotifySongInfo'
 
 const logoHeight = '15px'
 const logoWidth = '15px'
 const SpotifyPlayer = () => {
-  const { handleClickPlay, currentSong, fetchCurrentSong } = useSpotifyPlayer()
+  const {
+    handleClickPlay,
+    currentSong,
+    fetchCurrentSong,
+    queue,
+  } = useSpotifyPlayer()
 
   return (
     <WrapperPlayerMain>
       <WrapperTrackInfo tw="text-white">
-        {currentSong?.item?.name}
+        <SpotifySongInfo currentSong={currentSong} />
       </WrapperTrackInfo>
-
       <WrapperMainPlayer>
         <WrapperControl>
           <ControlWrapperOuter>

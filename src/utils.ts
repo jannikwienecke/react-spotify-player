@@ -1,9 +1,11 @@
 import { SPOTIFY_BASE_URL } from './spotifyConfig'
+import { State, StateCreator } from 'zustand'
+import produce, { Draft } from 'immer'
 interface PropsClient {
   endpoint: string
   token: string
   data?: {} | undefined
-  method?: 'GET' | 'POST' | 'PUT'
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   config?: {} | undefined
 }
 async function client({
@@ -31,7 +33,7 @@ async function client({
         window.localStorage.setItem('spotifyToken', '')
         window.localStorage.setItem('spotifyRefreshToken', '')
         // window.location.assign('/')
-        console.error('TOEN INVALID!!!!')
+        console.error('The Token is INVALID!')
 
         return Promise.reject({ message: 'Please re-authenticate.' })
       }
@@ -84,6 +86,11 @@ function preloadImage(src: string) {
     img.onload = () => resolve(src)
   })
 }
+
+export const immerMiddleware = <T extends State>(
+  config: StateCreator<T, (fn: (draft: Draft<T>) => void) => void>,
+): StateCreator<T> => (set, get, api) =>
+  config(fn => set(produce(fn) as (state: T) => T), get, api)
 
 export { createResource, preloadImage }
 export { client }

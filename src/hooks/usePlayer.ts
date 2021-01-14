@@ -1,9 +1,10 @@
-import { useSpotifyMutation } from './useSpotify'
 import React from 'react'
+import { useSpotifyMutation } from './useSpotify'
 
 // interface UsePlayInterface {}
 export const usePlayer = () => {
   const url = 'me/player'
+
   const { mutate, error } = useSpotifyMutation<null>({
     url,
     method: 'PUT',

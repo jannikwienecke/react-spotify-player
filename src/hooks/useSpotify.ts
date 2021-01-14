@@ -5,7 +5,7 @@ import { client } from '../utils'
 interface PropsSpotifyParameter {
   url: string
   data?: {} | undefined
-  method?: 'GET' | 'POST' | 'PUT'
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   enabled?: boolean
   refetchInterval?: false | number | undefined
 }
@@ -27,6 +27,7 @@ export const useSpotify = <T>({
     },
     { enabled, refetchInterval },
   )
+
   return { ...result }
 }
 
