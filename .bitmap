@@ -94,5 +94,88 @@
         "origin": "IMPORTED",
         "originallySharedDir": "src"
     },
+    "jannikwienecke.personal/react-slider@0.2.1": {
+        "files": [
+            {
+                "name": "Pointer.tsx",
+                "relativePath": "components/Pointer.tsx",
+                "test": false
+            },
+            {
+                "name": "ProgressBarPointer.css",
+                "relativePath": "components/ProgressBarPointer.css",
+                "test": false
+            },
+            {
+                "name": "ProgressBarPointer.tsx",
+                "relativePath": "components/ProgressBarPointer.tsx",
+                "test": false
+            },
+            {
+                "name": "ProgressBarSideContainer.tsx",
+                "relativePath": "components/ProgressBarSideContainer.tsx",
+                "test": false
+            },
+            {
+                "name": "Slider.css",
+                "relativePath": "components/Slider.css",
+                "test": false
+            },
+            {
+                "name": "Slider.tsx",
+                "relativePath": "components/Slider.tsx",
+                "test": false
+            },
+            {
+                "name": "react-slider.md",
+                "relativePath": "docs/react-slider.md",
+                "test": false
+            },
+            {
+                "name": "useChangesHandler.ts",
+                "relativePath": "hooks/useChangesHandler.ts",
+                "test": false
+            },
+            {
+                "name": "useMediaState.ts",
+                "relativePath": "hooks/useMediaState.ts",
+                "test": false
+            },
+            {
+                "name": "useProgressBar.ts",
+                "relativePath": "hooks/useProgressBar.ts",
+                "test": false
+            },
+            {
+                "name": "useSlider.ts",
+                "relativePath": "hooks/useSlider.ts",
+                "test": false
+            },
+            {
+                "name": "useStateRef.ts",
+                "relativePath": "hooks/useStateRef.ts",
+                "test": false
+            },
+            {
+                "name": "useUpdateIntervall.ts",
+                "relativePath": "hooks/useUpdateIntervall.ts",
+                "test": false
+            },
+            {
+                "name": "index.ts",
+                "relativePath": "index.ts",
+                "test": false
+            },
+            {
+                "name": "yarn-error.log",
+                "relativePath": "yarn-error.log",
+                "test": false
+            }
+        ],
+        "mainFile": "index.ts",
+        "rootDir": "components/react-slider",
+        "origin": "IMPORTED",
+        "originallySharedDir": "src/lib"
+    },
     "version": "14.8.8"
 }

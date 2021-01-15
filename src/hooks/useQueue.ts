@@ -4,17 +4,17 @@ import { useTrack } from './useTrack'
 import { useAlbum } from './useAlbum'
 import { useQueueStore } from './useQueueStore'
 import { usePlaylist } from './usePlaylist'
+import { usePlayerStore } from './usePlayerStore'
 
 export const useQueue = () => {
   const { data: album, getAlbum } = useAlbum()
   const { data: track, getTrack } = useTrack()
   const { data: playlist, getPlaylist } = usePlaylist()
-
-  const { data: currentSong } = useCurrentSong()
   const store = useQueueStore()
+  const { track: currentTrack } = usePlayerStore()
 
   React.useEffect(() => {
-    const contextUri = currentSong?.context?.uri
+    const contextUri = currentTrack?.context?.uri
     if (!contextUri) return
 
     const albumId =
@@ -29,7 +29,7 @@ export const useQueue = () => {
     if (albumId) getAlbum(albumId)
     if (trackId) getTrack(trackId)
     if (playlistId) getPlaylist(playlistId)
-  }, [currentSong?.context?.uri])
+  }, [currentTrack?.context?.uri])
 
   React.useEffect(() => {
     if (track) {

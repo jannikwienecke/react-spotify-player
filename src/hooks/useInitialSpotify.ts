@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React from 'react'
 import { SPOTIFY_PLAYER_NAME } from '../spotifyConfig'
+import { useLocalDeviceStore } from './useLocalDeviceStore'
 
 declare global {
   interface Window {
@@ -12,8 +13,8 @@ declare global {
 }
 
 export const useSpotify = (token: string) => {
-  const [deviceId, setDeviceId] = React.useState()
   const [spotifyContext, setSpotifyContext] = React.useState()
+  const { setDeviceId } = useLocalDeviceStore()
 
   React.useEffect(() => {
     const script = document.createElement('script')
@@ -69,6 +70,4 @@ export const useSpotify = (token: string) => {
       player.connect()
     }
   }, [])
-
-  return { deviceId }
 }

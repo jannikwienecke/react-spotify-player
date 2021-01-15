@@ -3,7 +3,7 @@ import React from 'react'
 import { MutationStatus } from 'react-query'
 
 export const useValidMutation = (
-  status: MutationStatus,
+  status: MutationStatus | undefined,
   callback: () => void,
 ) => {
   const statusSaveTrack = status
@@ -13,7 +13,6 @@ export const useValidMutation = (
     const isSuccess = statusSaveTrack === 'success'
     const prevIsLoading = prevStatus === 'loading'
     if (isSuccess && prevIsLoading) {
-      console.log('run callback....')
       callback()
     }
   }, [status])

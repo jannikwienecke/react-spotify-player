@@ -28,6 +28,8 @@
     "./src/components/SongImagePlayer.tsx",
     "./src/components/SpotifySongInfoHeart.tsx",
     "./src/hooks/useQueue.ts",
-    "./src/components/SpotifySongInfoRadio.tsx"
+    "./src/components/SpotifySongInfoRadio.tsx",
+    "./src/hooks/usePlayerStore.ts",
+    "./src/hooks/useHandlePlayerChanges.ts"
   ]
 }

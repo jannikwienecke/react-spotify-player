@@ -1,30 +1,35 @@
-// import React from 'react'
+import React from 'react'
+import { useDevices } from './useDevices'
+import { useSpotifyMutation } from './useSpotify'
 
-// export const useSpotifyQueue = () => {
-//   const [queue, setQueue] = React.useState<SpotifyApi.TrackObjectSimplified[]>(
-//     [],
-//   )
+export const useSpotifyQueue = () => {
+  const [url, setUrl] = React.useState('')
+  const { getActiveDeviceId } = useDevices()
 
-//   const addTrackToQueue = (track: SpotifyApi.TrackObjectSimplified) => {
-//     setQueue([...queue, track])
-//   }
+  const { mutate, error, ...result } = useSpotifyMutation<null>({
+    url,
+    method: 'POST',
+  })
 
-//   const addTracksToQueue = (tracks: SpotifyApi.TrackObjectSimplified[]) => {
-//     console.log('add....')
+  const addTrackToQueue = (uri: string) => {
+    const acticeDeviceId = getActiveDeviceId()
+    if (!acticeDeviceId) return
 
-//     setQueue([...queue, ...tracks])
-//   }
+    const baseUrl = 'me/player/queue'
+    const newUrl = baseUrl + '?uri=' + uri
 
-//   const setNewQueue = (tracks: SpotifyApi.TrackObjectSimplified[]) => {
-//     setQueue(tracks)
-//   }
+    setUrl(newUrl)
+  }
 
-//   console.log('queue: ', queue)
-//   return {
-//     queue,
-//     currentSong: queue.length > 0 ? queue[0] : undefined,
-//     setNewQueue,
-//     addTrackToQueue,
-//     addTracksToQueue,
-//   }
-// }
+  React.useEffect(() => {
+    if (!url) return
+    console.log('add to tqueue: ', url)
+    mutate({})
+  }, [url])
+
+  React.useEffect(() => {
+    if (error) console.error('ERROR useSpotifyQueue: ', error)
+  }, [error])
+
+  return { addTrackToQueue, statusAddSongToQueue: result.status, ...result }
+}

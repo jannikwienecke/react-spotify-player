@@ -5,7 +5,7 @@ import { useSpotifyMutation } from './useSpotify'
 export const usePlayer = () => {
   const url = 'me/player'
 
-  const { mutate, error } = useSpotifyMutation<null>({
+  const { mutate, error, status } = useSpotifyMutation<null>({
     url,
     method: 'PUT',
   })
@@ -18,5 +18,5 @@ export const usePlayer = () => {
     if (error) console.error('ERROR TRANSFER PLAYBACk: ', error)
   }, [error])
 
-  return { transferPlaybackToDevices }
+  return { transferPlaybackToDevices, statusTransferPlayback: status }
 }

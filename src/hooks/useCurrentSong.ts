@@ -7,6 +7,7 @@ export const useCurrentSong = () => {
   const result = useSpotify<currentSongType>({
     url,
     refetchInterval: refetchIntervall,
+    // enabled: false,
   })
 
   return result

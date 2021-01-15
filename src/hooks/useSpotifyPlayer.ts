@@ -1,40 +1,143 @@
+import { current } from 'immer'
 import React from 'react'
+import { useQueryClient } from 'react-query'
 import { useCurrentSong } from './useCurrentSong'
+import { useHandlePlayerChanges } from './useHandlePlayerChanges'
+import { useLocalDeviceStore } from './useLocalDeviceStore'
+import { useNext } from './useNextSong'
+import { usePause } from './usePause'
+import { usePlay } from './usePlay'
+import { usePlayerStore } from './usePlayerStore'
+import { usePlayPrevious } from './usePlayPrevious'
 import { useQueueStore } from './useQueueStore'
+import { useValidMutation } from './useValidMutation'
 
 export const useSpotifyPlayer = () => {
-  // const [songInfo, setSongInfo] = React.useState<
-  //   SpotifyApi.CurrentPlaybackResponse
-  // >()
-  // const [seekPosition, setSeekPosition] = React.useState<number>()
-
   const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
-  const { queue } = useQueueStore()
-  // const { play } = usePlay({ deviceId: currentDeviceId })
+  const { queue, getNextElement } = useQueueStore()
+  const {
+    play,
+    pause,
+    setTrack,
+    getStateFunc,
+    setAction,
+    track,
+  } = usePlayerStore()
+  const { play: playSongs, status: statusPlaySong } = usePlay()
+  const { pause: pauseSong, status: statusPauseSong } = usePause()
+  const { playNextSong, status: statusPlayNextSong } = useNext()
+  const { playPreviousTrack, status: statusPlayPreviouSong } = usePlayPrevious()
+  const { deviceId, deviceIsReady } = useLocalDeviceStore()
+  const queryClient = useQueryClient()
 
-  // SETS NEW CURRENTDEVICE WHEN CHANGED OR WHEN LOADED AT THE START
   const handleClickPlay = () => {
-    // console.log('slider.play change to ', !slider.play)
-    // slider.setPlay(!slider.play)
+    pauseRef.current = false
+
+    if (currentSong) {
+      const msSinceLastUpdate = getStateFunc().currentMsSong
+      console.log(
+        'msSinceLastUpdatemsSinceLastUpdatemsSinceLastUpdate',
+        msSinceLastUpdate,
+      )
+
+      playSongs([currentSong.item!.uri!], msSinceLastUpdate)
+    } else if (queue.length > 0) {
+      const newSong = getNextElement(queue, currentSong)
+      newSong && playSongs([newSong.uri])
+    } else {
+      playNextSong()
+    }
+
+    play()
   }
 
-  // React.useEffect(() => {
-  //   if (!currentSong?.progress_ms) return
+  useValidMutation(statusPlayNextSong, () => {
+    playSongs()
+  })
 
-  //   if (seekPosition && seekPosition !== currentSong.progress_ms) return
+  // WHENEVER A SUCCESSFULL CHANGE TO THE PLAYER HAPPENS
+  // TAkE ACTIONS
+  useHandlePlayerChanges(
+    {
+      statusPauseSong,
+      statusPlayNextSong,
+      statusPlayPreviouSong,
+      statusPlaySong,
+    },
+    fetchCurrentSong,
+  )
 
-  //   console.log('set current song...', currentSong.progress_ms)
+  const pauseRef = React.useRef(false)
+  const handleClickPause = () => {
+    setAction('pause')
+    pause()
+    pauseSong()
+    pauseRef.current = true
+    setTimeout(() => {
+      pauseRef.current = false
+    }, 3000)
+  }
 
-  //   setSongInfo(currentSong)
-  // }, [currentSong?.progress_ms])
+  const handleClickNext = () => {
+    playNextSong()
+    setAction('change')
+  }
+
+  const handleClickPrevious = () => {
+    playPreviousTrack()
+    setAction('change')
+  }
+
+  const hasCurrentSongRef = React.useRef<boolean>(false)
+  React.useEffect(() => {
+    if (pauseRef.current) {
+      return
+    }
+
+    setTrack(currentSong)
+    if (currentSong) {
+      hasCurrentSongRef.current = true
+      clearInterval(intervalRef.current)
+      intervalRef.current = 0
+    }
+  }, [currentSong])
 
   React.useEffect(() => {
-    console.log('queue', queue)
-  }, [queue])
+    if (currentSong?.is_playing && deviceIsReady) {
+      play()
+    } else {
+      pause()
+    }
+  }, [track?.is_playing])
+
+  const intervalRef = React.useRef<number>()
+  React.useEffect(() => {
+    if (!intervalRef.current) return
+    window.setTimeout(() => {
+      if (!hasCurrentSongRef.current && deviceId) {
+        playNextSong()
+      }
+      clearInterval(intervalRef.current)
+      intervalRef.current = 0
+    }, 800)
+  }, [deviceId, currentSong])
+
+  const fetchCurrentSong_ = () => {
+    intervalRef.current = window.setInterval(async () => {
+      await queryClient.invalidateQueries({}, { throwOnError: true })
+      fetchCurrentSong()
+    }, 100)
+  }
+
+  React.useEffect(() => {
+    fetchCurrentSong_()
+  }, [])
 
   return {
-    currentSong,
     handleClickPlay,
+    handleClickPause,
+    handleClickNext,
+    handleClickPrevious,
     fetchCurrentSong,
     queue,
   }
