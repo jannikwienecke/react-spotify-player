@@ -20,6 +20,7 @@ export const useHandlePlayerChanges = (
   fetchCurrentSong: () => void,
 ) => {
   const { updatePlayer, play } = usePlayerStore()
+
   useValidMutation(statusPauseSong, () => {
     console.log('statusPauseSong change happend', status)
     updatePlayer()

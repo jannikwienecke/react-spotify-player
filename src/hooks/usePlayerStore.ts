@@ -30,7 +30,10 @@ export const usePlayerStore = create<Player>(
     setGetStateFunc: func => set(state => void (state.getStateFunc = func)),
     setMs: ms => set(state => void (state.currentMs = ms)),
     setAction: action => set(state => void (state.lastAction = action)),
-    setTrack: track => set(state => void (state.track = track)),
+    setTrack: track => {
+      set(state => void (state.track = track))
+      set(state => void (state.playerCounter += 1))
+    },
     play: () => {
       set(state => void (state.isPlaying = true))
     },

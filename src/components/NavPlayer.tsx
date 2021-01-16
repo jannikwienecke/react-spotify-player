@@ -55,7 +55,6 @@ const SpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
       isReady.current = true
       console.log('ready.')
       setLoading(false)
-
       onReady()
     }
   }, [deviceIsReady, deviceId, track])
@@ -133,7 +132,10 @@ const SpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
           </WrapperControl>
 
           <WrapperProgressBar>
-            <MusicSlider fetchCurrentSong={fetchCurrentSong} />
+            <MusicSlider
+              fetchCurrentSong={fetchCurrentSong}
+              handleClickNext={handleClickNext}
+            />
           </WrapperProgressBar>
         </WrapperMainPlayer>
 

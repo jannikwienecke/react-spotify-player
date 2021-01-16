@@ -1,4 +1,3 @@
-import { current } from 'immer'
 import React from 'react'
 import { useQueryClient } from 'react-query'
 import { useCurrentSong } from './useCurrentSong'
@@ -27,7 +26,7 @@ export const useSpotifyPlayer = () => {
   const { pause: pauseSong, status: statusPauseSong } = usePause()
   const { playNextSong, status: statusPlayNextSong } = useNext()
   const { playPreviousTrack, status: statusPlayPreviouSong } = usePlayPrevious()
-  const { deviceId, deviceIsReady } = useLocalDeviceStore()
+  const { deviceIsReady } = useLocalDeviceStore()
   const queryClient = useQueryClient()
 
   const handleClickPlay = () => {
@@ -93,6 +92,7 @@ export const useSpotifyPlayer = () => {
     if (pauseRef.current) {
       return
     }
+    console.log(currentSong)
 
     setTrack(currentSong)
     if (currentSong) {
@@ -102,25 +102,36 @@ export const useSpotifyPlayer = () => {
     }
   }, [currentSong])
 
+  // const prevCurrentSongId = usePrevious(currentSong?.item?.id)
+  // React.useEffect(() => {
+  //   if (!prevCurrentSongId && currentSong?.item?.id) {
+  //     console.log('first song is loaded', currentSong)
+  //     console.log('played')
+  //   }
+  // }, [currentSong])
+
+  // const current = usePrevious(currentSong?.item?.id)
   React.useEffect(() => {
     if (currentSong?.is_playing && deviceIsReady) {
       play()
     } else {
       pause()
     }
-  }, [track?.is_playing])
+  }, [track])
 
   const intervalRef = React.useRef<number>()
   React.useEffect(() => {
+    if (!deviceIsReady) return
     if (!intervalRef.current) return
+
     window.setTimeout(() => {
-      if (!hasCurrentSongRef.current && deviceId) {
+      if (!hasCurrentSongRef.current) {
         playNextSong()
       }
       clearInterval(intervalRef.current)
       intervalRef.current = 0
     }, 800)
-  }, [deviceId, currentSong])
+  }, [deviceIsReady])
 
   const fetchCurrentSong_ = () => {
     intervalRef.current = window.setInterval(async () => {
