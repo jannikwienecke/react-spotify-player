@@ -22,26 +22,21 @@ export const useHandlePlayerChanges = (
   const { updatePlayer, play } = usePlayerStore()
 
   useValidMutation(statusPauseSong, () => {
-    console.log('statusPauseSong change happend', status)
     updatePlayer()
   })
 
   useValidMutation(statusPlayNextSong, () => {
-    console.log('statusPlayNextSong change happend', status)
     fetchCurrentSong()
     updatePlayer()
     play()
   })
   useValidMutation(statusPlayPreviouSong, () => {
-    console.log('statusPlayPreviouSong change happend', status)
     updatePlayer()
     fetchCurrentSong()
     play()
   })
 
   useValidMutation(statusPlaySong, async () => {
-    console.log('statusPlaySong change happend', status)
-
     // await queryClient.invalidateQueries(
     //   'me/player/currently-playing?market=US',
     //   {

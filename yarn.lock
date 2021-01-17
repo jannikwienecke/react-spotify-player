@@ -1154,10 +1154,10 @@
   resolved "https://node.bit.dev/jannikwienecke.personal.react-slider-types/-/jannikwienecke.personal.react-slider-types-0.2.2.tgz#c18ba5e9e303659452b888dc279075fa16eabcc3"
   integrity sha1-wYul6eMDZZRSuIjcJ5B1+hbqvMM=
 
-"@bit/jannikwienecke.personal.react-slider@^0.2.3":
-  version "0.2.3"
-  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider/-/jannikwienecke.personal.react-slider-0.2.3.tgz#423b9b202dcc92c34e56cd6fcfd2cd0f9bcfdd08"
-  integrity sha1-QjubIC3MksNOVs1vz9LND5vP3Qg=
+"@bit/jannikwienecke.personal.react-slider@^0.2.4":
+  version "0.2.4"
+  resolved "https://node.bit.dev/jannikwienecke.personal.react-slider/-/jannikwienecke.personal.react-slider-0.2.4.tgz#a6c88cbd76623b0602e173ccfd802edea85fb60e"
+  integrity sha1-psiMvXZiOwYC4XPM/YAu3qhftg4=
   dependencies:
     "@bit/jannikwienecke.personal.react-slider-types" "0.2.2"
     "@bit/jannikwienecke.personal.use-previous" "0.1.7"

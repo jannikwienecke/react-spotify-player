@@ -2,7 +2,7 @@ import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist
 import create from 'zustand'
 import { immerMiddleware } from '../utils'
 
-export type actionTypes = 'pause' | 'play' | 'change' | ''
+export type actionTypes = 'pause' | 'play' | 'change' | 'songUpdate' | ''
 export type Player = {
   isPlaying: boolean
   playerCounter: number

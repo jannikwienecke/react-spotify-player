@@ -4,7 +4,8 @@ import Slider, { useSlider } from '@bit/jannikwienecke.personal.react-slider'
 import { usePlayerStore } from '../hooks/usePlayerStore'
 import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist/types'
 import { useQueryClient } from 'react-query'
-import { useSpotifyPlayer } from '../hooks/useSpotifyPlayer'
+import { last } from 'lodash'
+import { current } from 'immer'
 interface MusicSliderProps {
   fetchCurrentSong: () => void
   handleClickNext: () => void
@@ -34,20 +35,28 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
   const ignoreStateChangeRef = React.useRef(false)
   React.useEffect(() => {
     if (playerCounter) {
-      console.log('playerCounter: ', playerCounter)
       ignoreStateChangeRef.current = true
-
       let newMs = 0
       if (lastAction === 'change') {
         newMs = newMs === currentState.currentMsSong ? 1 : 0
+      } else if (lastAction === 'pause') {
+        newMs = currentState.currentMsSong
+      } else if (lastAction === 'songUpdate') {
+        console.log('manualMsChangeRef: ', manualMsChangeRef)
+        if (manualMsChangeRef.current) {
+          manualMsChangeRef.current = false
+          return
+        }
+        newMs = track?.progress_ms || currentState.currentMsSong
       } else {
-        newMs = track?.progress_ms || 0
+        console.warn('ERRROR!!!')
       }
 
       setCurrentState({
         ...currentState,
         isPlaying: lastAction === 'change' ? false : isPlaying,
         currentMsSong: newMs,
+        totalMsSong: track?.item?.duration_ms || 250000,
       })
     }
   }, [playerCounter])
@@ -56,13 +65,16 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
     await queryClient.invalidateQueries()
     fetchCurrentSong()
   }
-
-  const onMsChange = (ms: number) => {
+  const manualMsChangeRef = React.useRef(false)
+  const onMsChange = async (ms: number) => {
+    manualMsChangeRef.current = true
+    await queryClient.invalidateQueries()
     seekToPosition(ms)
   }
 
   const mediaId = track?.item?.id ? track.item.id : 'abc'
   const totalMs = track?.item?.duration_ms || 0
+
   const { state, handleDragStart, handleMsChange, getState } = useSlider({
     isPlaying: isPlaying || false,
     currentMsSong: currentState.currentMsSong || 0,
@@ -102,6 +114,10 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
       })
     }
   }, [track])
+
+  React.useEffect(() => {
+    console.log('currentState: ', currentState)
+  }, [currentState])
 
   return (
     <Slider

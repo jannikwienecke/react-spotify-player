@@ -16,7 +16,7 @@ export const useNext = () => {
   const url = 'me/player/next'
   const setNext = React.useRef(false)
   const playTopTracks = React.useRef(false)
-  const { queue, getNextElement } = useQueueStore()
+  const { queue, getNextElement, stackPastSongs } = useQueueStore()
   const { statusAddSongToQueue } = useSpotifyQueue()
   const { play, status: statusPlaySong } = usePlay()
   const { setNewRadio, nextSong } = useSpotifyRadio()
@@ -31,21 +31,9 @@ export const useNext = () => {
     setNext.current = false
   })
 
-  // const refPlay = React.useRef<boolean>(false)
   useHandlePlayerChanges({ statusPlaySong }, async () => {
     await queryClient.invalidateQueries()
-    console.log('fetch song......')
-
     fetchCurrentSong()
-
-    // if (!refPlay.current) {
-    //   refPlay.current = true
-    // } else {
-    //   refPlay.current = false
-    //   await queryClient.invalidateQueries()
-    //   console.log('fetch song...')
-    //   fetchCurrentSong()
-    // }
   })
 
   const { mutate, error, ...result } = useSpotifyMutation<null>({
@@ -54,33 +42,24 @@ export const useNext = () => {
   })
 
   const playNextSong = React.useCallback(() => {
-    console.log('-----')
     let nextSong = getNextElement(queue, track?.item)
     setNext.current = true
-
     if (nextSong) {
-      console.log('nextSong', nextSong)
       play([nextSong.uri])
     } else if (track) {
-      console.log('set new Radio3')
       setNewRadio({ seed_tracks: track.item?.id })
     } else {
       if (topTracks) {
-        console.log(topTracks)
         const newSong = _.shuffle(topTracks.items)[0]
-        console.log('set new Radio2')
-
         setNewRadio({ seed_tracks: newSong.id })
       } else {
         playTopTracks.current = true
       }
     }
-  }, [queue, topTracks])
+  }, [queue, topTracks, track])
 
   React.useEffect(() => {
     if (!nextSong) return
-    console.log('play new song1')
-
     playNextSong()
   }, [nextSong])
 
@@ -89,8 +68,6 @@ export const useNext = () => {
     if (!playTopTracks.current) return
 
     const newSong = _.shuffle(topTracks.items)[0]
-    console.log('set new Radio1')
-
     setNewRadio({ seed_tracks: newSong.id })
   }, [topTracks])
 

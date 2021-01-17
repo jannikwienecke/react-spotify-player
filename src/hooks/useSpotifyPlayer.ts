@@ -1,5 +1,6 @@
 import React from 'react'
 import { useQueryClient } from 'react-query'
+import { useCurrentPlayer } from './useCurrentPlayer'
 import { useCurrentSong } from './useCurrentSong'
 import { useHandlePlayerChanges } from './useHandlePlayerChanges'
 import { useLocalDeviceStore } from './useLocalDeviceStore'
@@ -13,6 +14,7 @@ import { useValidMutation } from './useValidMutation'
 
 export const useSpotifyPlayer = () => {
   const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
+  useCurrentPlayer()
   const { queue, getNextElement } = useQueueStore()
   const {
     play,
@@ -28,17 +30,11 @@ export const useSpotifyPlayer = () => {
   const { playPreviousTrack, status: statusPlayPreviouSong } = usePlayPrevious()
   const { deviceIsReady } = useLocalDeviceStore()
   const queryClient = useQueryClient()
-
   const handleClickPlay = () => {
     pauseRef.current = false
 
     if (currentSong) {
       const msSinceLastUpdate = getStateFunc().currentMsSong
-      console.log(
-        'msSinceLastUpdatemsSinceLastUpdatemsSinceLastUpdate',
-        msSinceLastUpdate,
-      )
-
       playSongs([currentSong.item!.uri!], msSinceLastUpdate)
     } else if (queue.length > 0) {
       const newSong = getNextElement(queue, currentSong)
@@ -92,9 +88,7 @@ export const useSpotifyPlayer = () => {
     if (pauseRef.current) {
       return
     }
-    console.log(currentSong)
 
-    setTrack(currentSong)
     if (currentSong) {
       hasCurrentSongRef.current = true
       clearInterval(intervalRef.current)
@@ -102,22 +96,20 @@ export const useSpotifyPlayer = () => {
     }
   }, [currentSong])
 
-  // const prevCurrentSongId = usePrevious(currentSong?.item?.id)
-  // React.useEffect(() => {
-  //   if (!prevCurrentSongId && currentSong?.item?.id) {
-  //     console.log('first song is loaded', currentSong)
-  //     console.log('played')
-  //   }
-  // }, [currentSong])
-
-  // const current = usePrevious(currentSong?.item?.id)
   React.useEffect(() => {
-    if (currentSong?.is_playing && deviceIsReady) {
+    if (!deviceIsReady) return
+
+    if (currentSong?.is_playing) {
       play()
     } else {
       pause()
     }
   }, [track])
+
+  React.useEffect(() => {
+    setAction('songUpdate')
+    setTrack(currentSong)
+  }, [currentSong])
 
   const intervalRef = React.useRef<number>()
   React.useEffect(() => {
