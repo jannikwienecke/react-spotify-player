@@ -107,6 +107,9 @@ export const useSpotifyPlayer = () => {
   }, [track])
 
   React.useEffect(() => {
+    // TODO - WENN CLICk on SONG IN SONGLIST - UPDATE THE SLIDER IMMEDIALY
+    console.log('song update in use effect...')
+
     setAction('songUpdate')
     setTrack(currentSong)
   }, [currentSong])

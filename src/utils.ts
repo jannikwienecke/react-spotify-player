@@ -94,3 +94,29 @@ export const immerMiddleware = <T extends State>(
 
 export { createResource, preloadImage }
 export { client }
+
+export const getArtistsString = (
+  artists: SpotifyApi.TrackObjectSimplified['artists'] | undefined,
+  maxLength: number = 30,
+) => {
+  if (!artists) return ''
+
+  const artistString = artists.map(artist => artist.name).join(', ')
+
+  return artistString.length < maxLength
+    ? artistString
+    : artistString.slice(0, maxLength) + '...'
+}
+
+export const getTrackString = (
+  trackName: SpotifyApi.TrackObjectSimplified['name'] | undefined,
+  maxLength: number = 30,
+) => {
+  if (!trackName) return ''
+
+  const trackString =
+    trackName.length < maxLength
+      ? trackName
+      : trackName.slice(0, maxLength) + '...'
+  return trackString
+}

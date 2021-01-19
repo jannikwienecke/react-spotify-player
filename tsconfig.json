@@ -31,6 +31,7 @@
     "./src/components/SpotifySongInfoRadio.tsx",
     "./src/hooks/usePlayerStore.ts",
     "./src/hooks/useHandlePlayerChanges.ts",
-    "./src/components/SpotifySongInfoPlaylist.tsx"
+    "./src/components/SpotifySongInfoPlaylist.tsx",
+    "./src/components/PlaylistButton.tsx"
   ]
 }

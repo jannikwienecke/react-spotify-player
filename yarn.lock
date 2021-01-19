@@ -1141,10 +1141,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@bit/jannikwienecke.personal.react-listbox@^0.0.9":
-  version "0.0.9"
-  resolved "https://node.bit.dev/jannikwienecke.personal.react-listbox/-/jannikwienecke.personal.react-listbox-0.0.9.tgz#0e5f49be1c8bedfc79f0958569da96f514a25f5a"
-  integrity sha1-Dl9JvhyL7fx58JWFadqW9RSiX1o=
+"@bit/jannikwienecke.personal.react-listbox@^0.1.7":
+  version "0.1.7"
+  resolved "https://node.bit.dev/jannikwienecke.personal.react-listbox/-/jannikwienecke.personal.react-listbox-0.1.7.tgz#1e66855ab07a68ad72b298941a9b42758bc0561a"
+  integrity sha1-HmaFWrB6aK1yspiUGptCdYvAVho=
   dependencies:
     "@bit/jannikwienecke.personal.use-outside-click" "0.0.1"
     "@reach/listbox" "^0.12.1"

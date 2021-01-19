@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.0.0-0",
-    "@bit/jannikwienecke.personal.react-listbox": "^0.0.9",
+    "@bit/jannikwienecke.personal.react-listbox": "^0.1.7",
     "@bit/jannikwienecke.personal.react-slider": "^0.2.4",
     "@bit/jannikwienecke.personal.use-previous": "^0.1.7",
     "@emotion/babel-plugin-jsx-pragmatic": "^0.1.5",

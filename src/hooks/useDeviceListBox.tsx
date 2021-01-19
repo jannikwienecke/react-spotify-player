@@ -11,7 +11,9 @@ export const useDeviceListBox = ({
   const listItems: ListItem[] = devices.map(device => {
     return {
       id: device.id || '',
-      name: device.name || '',
+      name: device.is_active ? 'You listen at:' : device.name,
+      subName: device.is_active ? device.name : 'Spotify Connect',
+      // subname' device.name || '',
       isActive: device.is_active || false,
     }
   })

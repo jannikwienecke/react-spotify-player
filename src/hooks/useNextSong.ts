@@ -43,6 +43,16 @@ export const useNext = () => {
 
   const playNextSong = React.useCallback(() => {
     let nextSong = getNextElement(queue, track?.item)
+    // console.log(
+    //   'stackPastSongs==',
+    //   stackPastSongs.map(song => song.name),
+    // )
+
+    // console.log(
+    //   'queue==',
+    //   queue.map(song => song.name),
+    // )
+
     setNext.current = true
     if (nextSong) {
       play([nextSong.uri])

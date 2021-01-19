@@ -7,13 +7,14 @@ export type Queue = {
   addToQueue: (track: SpotifyApi.TrackObjectSimplified) => void
   addManyToQueue: (tracks: SpotifyApi.TrackObjectSimplified[]) => void
   setNewQueue: (tracks: SpotifyApi.TrackObjectSimplified[]) => void
+  setNewStack: (tracks: SpotifyApi.TrackObjectSimplified[]) => void
   getNextElement: (
     queue: SpotifyApi.TrackObjectSimplified[],
     track: SpotifyApi.TrackObjectSimplified | undefined | null,
   ) => SpotifyApi.TrackObjectSimplified | false
   getLastElement: (
     stackPastSongs: SpotifyApi.TrackObjectSimplified[],
-  ) => SpotifyApi.TrackObjectSimplified
+  ) => SpotifyApi.TrackObjectSimplified | false
 }
 
 export const useQueueStore = create<Queue>(
@@ -25,9 +26,10 @@ export const useQueueStore = create<Queue>(
     addManyToQueue: tracks =>
       set(state => void (state.queue = [...state.queue, ...tracks])),
     setNewQueue: tracks => set(state => void (state.queue = [...tracks])),
+    setNewStack: tracks =>
+      set(state => void (state.stackPastSongs = [...tracks])),
 
     getNextElement: (queue, track) => {
-      console.log('queue: ', queue)
       if (queue.length === 0) return false
 
       let nextSong = queue[0]
@@ -40,14 +42,11 @@ export const useQueueStore = create<Queue>(
       const currentTrack = track as SpotifyApi.TrackObjectSimplified
       set(state => void (state.queue = [...state.queue.slice(numberRemove)]))
 
-      console.log('currentTrack', currentTrack)
-      console.log('nextSong', nextSong)
       if (currentTrack) {
         set(
           state =>
             void (state.stackPastSongs = [
               currentTrack,
-              nextSong,
               ...state.stackPastSongs,
             ]),
         )

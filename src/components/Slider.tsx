@@ -1,11 +1,9 @@
-import React from 'react'
-import { useSeekPosition } from '../hooks/useSeekPosition'
 import Slider, { useSlider } from '@bit/jannikwienecke.personal.react-slider'
-import { usePlayerStore } from '../hooks/usePlayerStore'
 import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist/types'
+import React from 'react'
 import { useQueryClient } from 'react-query'
-import { last } from 'lodash'
-import { current } from 'immer'
+import { usePlayerStore } from '../hooks/usePlayerStore'
+import { useSeekPosition } from '../hooks/useSeekPosition'
 interface MusicSliderProps {
   fetchCurrentSong: () => void
   handleClickNext: () => void
@@ -42,7 +40,8 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
       } else if (lastAction === 'pause') {
         newMs = currentState.currentMsSong
       } else if (lastAction === 'songUpdate') {
-        console.log('manualMsChangeRef: ', manualMsChangeRef)
+        console.log('song update...')
+
         if (manualMsChangeRef.current) {
           manualMsChangeRef.current = false
           return
@@ -51,7 +50,6 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
       } else {
         console.warn('ERRROR!!!')
       }
-
       setCurrentState({
         ...currentState,
         isPlaying: lastAction === 'change' ? false : isPlaying,
@@ -68,7 +66,6 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
   const manualMsChangeRef = React.useRef(false)
   const onMsChange = async (ms: number) => {
     manualMsChangeRef.current = true
-    await queryClient.invalidateQueries()
     seekToPosition(ms)
   }
 
@@ -114,10 +111,6 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
       })
     }
   }, [track])
-
-  React.useEffect(() => {
-    console.log('currentState: ', currentState)
-  }, [currentState])
 
   return (
     <Slider

@@ -14,6 +14,8 @@ export const useRefetchCurrentSong = (status: MutationStatus) => {
       {},
       { throwOnError: true },
     )
+    console.log('fetch current song...')
+
     fetchCurrentSong()
   })
 }
