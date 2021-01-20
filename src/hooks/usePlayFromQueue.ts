@@ -6,7 +6,7 @@ import { useRefetchCurrentSong } from './useRefetchCurrentSong'
 export const usePlayFromQueue = () => {
   const { play, status: statusPlay } = usePlay()
   const { queue, setNewQueue, stackPastSongs, setNewStack } = useQueueStore()
-  const { track } = usePlayerStore()
+  const { track, setAction, updatePlayer, setNextTrack } = usePlayerStore()
   useRefetchCurrentSong(statusPlay)
 
   const playFromQueue = (newTrack: SpotifyApi.TrackObjectFull) => {
@@ -19,6 +19,10 @@ export const usePlayFromQueue = () => {
     }
 
     play([newTrack.uri])
+
+    setNextTrack(newTrack)
+    setAction('change')
+    updatePlayer()
   }
 
   return { playFromQueue }

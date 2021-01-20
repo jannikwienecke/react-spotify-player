@@ -4,9 +4,11 @@ import { immerMiddleware } from '../utils'
 export type Queue = {
   stackPastSongs: SpotifyApi.TrackObjectSimplified[]
   queue: SpotifyApi.TrackObjectSimplified[]
+  preloadedFullTracks: SpotifyApi.TrackObjectFull[]
   addToQueue: (track: SpotifyApi.TrackObjectSimplified) => void
   addManyToQueue: (tracks: SpotifyApi.TrackObjectSimplified[]) => void
   setNewQueue: (tracks: SpotifyApi.TrackObjectSimplified[]) => void
+  setPreloadedFullTrack: (tracks: SpotifyApi.TrackObjectFull[]) => void
   setNewStack: (tracks: SpotifyApi.TrackObjectSimplified[]) => void
   getNextElement: (
     queue: SpotifyApi.TrackObjectSimplified[],
@@ -21,11 +23,14 @@ export const useQueueStore = create<Queue>(
   immerMiddleware(set => ({
     stackPastSongs: [],
     queue: [],
+    preloadedFullTracks: [],
     addToQueue: track =>
       set(state => void (state.queue = [...state.queue, track])),
     addManyToQueue: tracks =>
       set(state => void (state.queue = [...state.queue, ...tracks])),
     setNewQueue: tracks => set(state => void (state.queue = [...tracks])),
+    setPreloadedFullTrack: tracks =>
+      set(state => void (state.preloadedFullTracks = [...tracks])),
     setNewStack: tracks =>
       set(state => void (state.stackPastSongs = [...tracks])),
 

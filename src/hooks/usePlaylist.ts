@@ -8,7 +8,15 @@ export const usePlaylist = () => {
     enabled: false,
   })
 
+  const actionRef = React.useRef('')
   const getPlaylist = (playlistId: string) => {
+    const baseUrl = 'playlists/'
+    let currentUrl = baseUrl + playlistId
+    setUrl(currentUrl)
+    // actionRef.current = TODO - HIER WEITER MACHEN!! UNFOLLOW DELETE PLAYLIST!
+  }
+
+  const unfollowPlaylist = () => {
     const baseUrl = 'playlists/'
     let currentUrl = baseUrl + playlistId
     setUrl(currentUrl)

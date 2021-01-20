@@ -21,6 +21,14 @@ export const useSpotifyQueue = () => {
     setUrl(newUrl)
   }
 
+  const addTracksToQueue = (uris: string[]) => {
+    let index = 0
+    window.setInterval(() => {
+      addTrackToQueue(uris[index])
+      index++
+    }, 50)
+  }
+
   React.useEffect(() => {
     if (!url) return
     console.log('add to tqueue: ', url)
@@ -31,5 +39,10 @@ export const useSpotifyQueue = () => {
     if (error) console.error('ERROR useSpotifyQueue: ', error)
   }, [error])
 
-  return { addTrackToQueue, statusAddSongToQueue: result.status, ...result }
+  return {
+    addTrackToQueue,
+    addTracksToQueue,
+    statusAddSongToQueue: result.status,
+    ...result,
+  }
 }

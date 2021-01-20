@@ -16,13 +16,15 @@ export const useNext = () => {
   const url = 'me/player/next'
   const setNext = React.useRef(false)
   const playTopTracks = React.useRef(false)
-  const { queue, getNextElement, stackPastSongs } = useQueueStore()
+  const { queue, getNextElement } = useQueueStore()
   const { statusAddSongToQueue } = useSpotifyQueue()
   const { play, status: statusPlaySong } = usePlay()
   const { setNewRadio, nextSong } = useSpotifyRadio()
   const { topTracks } = useTopArtistsTracks()
-  const { track } = usePlayerStore()
+  const { track, setNextTrack } = usePlayerStore()
   const { refetch: fetchCurrentSong } = useCurrentSong()
+  const { preloadedFullTracks } = useQueueStore()
+
   const queryClient = useQueryClient()
 
   // WHEN SONG IS ADDED TO THE QUEUE - PLAY IT!
@@ -43,30 +45,33 @@ export const useNext = () => {
 
   const playNextSong = React.useCallback(() => {
     let nextSong = getNextElement(queue, track?.item)
-    // console.log(
-    //   'stackPastSongs==',
-    //   stackPastSongs.map(song => song.name),
-    // )
-
-    // console.log(
-    //   'queue==',
-    //   queue.map(song => song.name),
-    // )
 
     setNext.current = true
     if (nextSong) {
       play([nextSong.uri])
+      const preLoadedTrack = preloadedFullTracks.find(
+        preloadedTrack => nextSong && preloadedTrack.id === nextSong.id,
+      )
+      if (preLoadedTrack) {
+        setNextTrack(preLoadedTrack)
+      }
     } else if (track) {
-      setNewRadio({ seed_tracks: track.item?.id })
+      setNewRadio(
+        { seed_tracks: track.item?.id },
+        { name: `Radio - ${track.item?.name}` },
+      )
     } else {
       if (topTracks) {
         const newSong = _.shuffle(topTracks.items)[0]
-        setNewRadio({ seed_tracks: newSong.id })
+        setNewRadio(
+          { seed_tracks: newSong.id },
+          { name: `Radio - ${newSong.name}` },
+        )
       } else {
         playTopTracks.current = true
       }
     }
-  }, [queue, topTracks, track])
+  }, [queue, topTracks, track, preloadedFullTracks])
 
   React.useEffect(() => {
     if (!nextSong) return
@@ -78,7 +83,10 @@ export const useNext = () => {
     if (!playTopTracks.current) return
 
     const newSong = _.shuffle(topTracks.items)[0]
-    setNewRadio({ seed_tracks: newSong.id })
+    setNewRadio(
+      { seed_tracks: newSong.id },
+      { name: `Radio - ${newSong.name}` },
+    )
   }, [topTracks])
 
   return { ...result, playNextSong, statusPlaySong }

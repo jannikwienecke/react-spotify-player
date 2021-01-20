@@ -9,6 +9,7 @@ import { usePause } from './usePause'
 import { usePlay } from './usePlay'
 import { usePlayerStore } from './usePlayerStore'
 import { usePlayPrevious } from './usePlayPrevious'
+import { usePreloadFullTracks } from './usePreloadFullTracks'
 import { useQueueStore } from './useQueueStore'
 import { useValidMutation } from './useValidMutation'
 
@@ -29,6 +30,7 @@ export const useSpotifyPlayer = () => {
   const { playNextSong, status: statusPlayNextSong } = useNext()
   const { playPreviousTrack, status: statusPlayPreviouSong } = usePlayPrevious()
   const { deviceIsReady } = useLocalDeviceStore()
+  usePreloadFullTracks()
   const queryClient = useQueryClient()
   const handleClickPlay = () => {
     pauseRef.current = false

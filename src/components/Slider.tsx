@@ -35,13 +35,12 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
     if (playerCounter) {
       ignoreStateChangeRef.current = true
       let newMs = 0
+
       if (lastAction === 'change') {
         newMs = newMs === currentState.currentMsSong ? 1 : 0
       } else if (lastAction === 'pause') {
         newMs = currentState.currentMsSong
       } else if (lastAction === 'songUpdate') {
-        console.log('song update...')
-
         if (manualMsChangeRef.current) {
           manualMsChangeRef.current = false
           return

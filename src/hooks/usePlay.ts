@@ -20,7 +20,9 @@ export const usePlay = () => {
   React.useEffect(() => {
     if (url) {
       if (uris) {
-        mutate({ uris, position_ms: currentMs.current })
+        console.log('uris: ', uris)
+        mutate({ context_uri: uris[0] })
+        // mutate({ uris, position_ms: currentMs.current })
       } else {
         mutate({ position_ms: currentMs.current })
       }

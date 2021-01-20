@@ -16,7 +16,9 @@ export type Player = {
   setGetStateFunc: (func: () => StateSliderProps) => void
   getStateFunc: () => StateSliderProps
   track: SpotifyApi.CurrentPlaybackResponse | undefined
+  nextTrack: SpotifyApi.TrackObjectFull | undefined
   setTrack: (track: SpotifyApi.CurrentPlaybackResponse | undefined) => void
+  setNextTrack: (nextTrack: SpotifyApi.TrackObjectFull | undefined) => void
 }
 
 export const usePlayerStore = create<Player>(
@@ -25,6 +27,7 @@ export const usePlayerStore = create<Player>(
     isPlaying: false,
     playerCounter: 0,
     track: undefined,
+    nextTrack: undefined,
     currentMs: 0,
     getStateFunc: () => {},
     setGetStateFunc: func => set(state => void (state.getStateFunc = func)),
@@ -33,6 +36,9 @@ export const usePlayerStore = create<Player>(
     setTrack: track => {
       set(state => void (state.track = track))
       set(state => void (state.playerCounter += 1))
+    },
+    setNextTrack: nextTrack => {
+      set(state => void (state.nextTrack = nextTrack))
     },
     play: () => {
       set(state => void (state.isPlaying = true))
