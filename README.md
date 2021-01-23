@@ -1,3 +1,3 @@
-# react-slider-example
+# react-spotify-player
 
-## EXAMPLE - how to use react-slider
+## Player to control your spotify web application
