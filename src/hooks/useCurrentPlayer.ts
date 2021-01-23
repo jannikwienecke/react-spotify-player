@@ -4,23 +4,26 @@ import { useQueryClient } from 'react-query'
 import { usePlayerStore } from './usePlayerStore'
 import { useSpotify } from './useSpotify'
 import { useSpotifyToken } from './useSpotifyToken'
+
+export const currentPlaybackUrl = 'me/player'
 export const useCurrentPlayer = () => {
   const { play, pause } = usePlayerStore()
   const { token } = useSpotifyToken()
   const queryClient = useQueryClient()
-  const url = 'me/player'
 
   const { refetch, ...result } = useSpotify<SpotifyApi.CurrentPlaybackResponse>(
     {
-      url,
+      url: currentPlaybackUrl,
       refetchInterval: false,
     },
   )
 
   const startInterval = () => {
     const interval = window.setInterval(async () => {
-      await queryClient.invalidateQueries([url, token.slice(0, 20)])
-      // await queryClient.invalidateQueries()
+      await queryClient.invalidateQueries([
+        currentPlaybackUrl,
+        token.slice(0, 20),
+      ])
       refetch()
     }, 300)
 

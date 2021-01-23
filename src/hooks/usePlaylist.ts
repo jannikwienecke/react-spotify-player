@@ -1,31 +1,23 @@
-import { useSpotify } from './useSpotify'
+import { usePrevious } from '@bit/jannikwienecke.personal.use-previous'
 import React from 'react'
+// import { usePlaylistStore } from './usePlaylistStore'
+// import { useUnfollowPlaylist } from './useRemovePlaylist'
+
 export const usePlaylist = () => {
-  const [url, setUrl] = React.useState('')
-  const { refetch, ...result } = useSpotify<SpotifyApi.PlaylistObjectFull>({
-    url,
-    refetchInterval: false,
-    enabled: false,
-  })
-
-  const actionRef = React.useRef('')
-  const getPlaylist = (playlistId: string) => {
-    const baseUrl = 'playlists/'
-    let currentUrl = baseUrl + playlistId
-    setUrl(currentUrl)
-    // actionRef.current = TODO - HIER WEITER MACHEN!! UNFOLLOW DELETE PLAYLIST!
-  }
-
-  const unfollowPlaylist = () => {
-    const baseUrl = 'playlists/'
-    let currentUrl = baseUrl + playlistId
-    setUrl(currentUrl)
-  }
-
-  React.useEffect(() => {
-    if (!url) return
-    refetch()
-  }, [url])
-
-  return { ...result, getPlaylist }
+  // const { playlist } = usePlaylistStore()
+  // const { unfollowPlaylist } = useUnfollowPlaylist()
+  // const previousPlaylistId = usePrevious(playlist?.id)
+  // React.useEffect(() => {
+  //   if (!playlist?.id) return
+  //   if (previousPlaylistId && previousPlaylistId !== playlist.id) {
+  //     console.log('unfollow playlist', previousPlaylistId)
+  //     unfollowPlaylist(previousPlaylistId)
+  //   }
+  // }, [playlist?.id])
+  // React.useEffect(() => {
+  //   return () => {
+  //     if (!playlist) return
+  //     console.log('unfollow', playlist)
+  //   }
+  // }, [])
 }

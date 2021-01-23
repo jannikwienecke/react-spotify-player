@@ -1,9 +1,11 @@
 import { useSpotifyMutation } from './useSpotify'
 import React from 'react'
 import { useMe } from './useMe'
-import { usePlaylist } from './usePlaylist'
+import { useGetPlaylist } from './useGetPlaylist'
 import { useValidMutation } from './useValidMutation'
 import { usePlay } from './usePlay'
+import { usePlaylistStore } from './usePlaylistStore'
+import { useUnfollowPlaylist } from './useRemovePlaylist'
 
 export interface PropsNewPlaylist {
   name: string
@@ -14,8 +16,10 @@ export interface PropsNewPlaylist {
 
 export const useCreatePlaylist = () => {
   const { me } = useMe()
-  const { getPlaylist, data: playlist } = usePlaylist()
-  const { play } = usePlay()
+  const { getPlaylist, data: playlist } = useGetPlaylist()
+  const { unfollowPlaylist } = useUnfollowPlaylist()
+  const { setPlaylist } = usePlaylistStore()
+  const { playPlaylist } = usePlay()
   const [urlCreatePlaylist, setUrlCreatePlaylist] = React.useState('')
   const [urlAddSongsPlaylist, setUrlAddSongsPlaylist] = React.useState('')
 
@@ -29,7 +33,6 @@ export const useCreatePlaylist = () => {
 
   const {
     mutate: addItemsToPlaylist,
-    data: responseAddItems,
     status: statusAddItems,
   } = useSpotifyMutation<SpotifyApi.PlaylistObjectFull>({
     url: urlAddSongsPlaylist,
@@ -44,9 +47,6 @@ export const useCreatePlaylist = () => {
   const urisRef = React.useRef<string[] | undefined>()
   const createNewPlaylist = (options: PropsNewPlaylist, uris: string[]) => {
     urisRef.current = uris
-    console.log('urlCreatePlaylist', urlCreatePlaylist)
-    console.log('create playlist', options)
-
     createPlaylist(options)
   }
 
@@ -63,21 +63,17 @@ export const useCreatePlaylist = () => {
   }, [me])
 
   React.useEffect(() => {
+    if (!responseCreatePlaylist?.id) return
     setUrlAddSongsPlaylist(`playlists/${responseCreatePlaylist?.id}/tracks`)
   }, [responseCreatePlaylist?.id])
 
   React.useEffect(() => {
-    console.log('responseAddItems', responseAddItems)
-  }, [responseAddItems])
-
-  React.useEffect(() => {
-    console.log('playlist: ', playlist)
-    if (playlist) {
-      console.log('play', playlist.uri)
-
-      play([playlist.uri])
+    if (playlist?.id) {
+      setPlaylist(playlist)
+      unfollowPlaylist(playlist.id)
+      playPlaylist(playlist.uri)
     }
-  }, [playlist])
+  }, [playlist?.id])
 
   return { createNewPlaylist }
 }

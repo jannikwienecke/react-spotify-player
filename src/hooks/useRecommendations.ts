@@ -23,8 +23,6 @@ export const useRecommendations = () => {
 
   React.useEffect(() => {
     if (!url) return
-    console.log('FETCH = ', url)
-
     refetch()
   }, [url])
 

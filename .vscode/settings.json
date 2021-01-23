@@ -15,5 +15,12 @@
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript",
     "typescriptreact": "javascript"
-  }
+  },
+  "cSpell.ignoreWords": [
+    "jannikwienecke",
+    "playlist",
+    "spotify",
+    "unfollow",
+    "use"
+  ]
 }

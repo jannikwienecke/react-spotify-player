@@ -8,6 +8,7 @@ export type Player = {
   playerCounter: number
   lastAction: actionTypes
   currentMs: number
+  contextUri: string
   setMs: (ms: number) => void
   setAction: (action: actionTypes) => void
   play: () => void
@@ -18,6 +19,7 @@ export type Player = {
   track: SpotifyApi.CurrentPlaybackResponse | undefined
   nextTrack: SpotifyApi.TrackObjectFull | undefined
   setTrack: (track: SpotifyApi.CurrentPlaybackResponse | undefined) => void
+  setContextUri: (contextUri: string) => void
   setNextTrack: (nextTrack: SpotifyApi.TrackObjectFull | undefined) => void
 }
 
@@ -32,6 +34,9 @@ export const usePlayerStore = create<Player>(
     getStateFunc: () => {},
     setGetStateFunc: func => set(state => void (state.getStateFunc = func)),
     setMs: ms => set(state => void (state.currentMs = ms)),
+    setContextUri: contextUri =>
+      set(state => void (state.contextUri = contextUri)),
+
     setAction: action => set(state => void (state.lastAction = action)),
     setTrack: track => {
       set(state => void (state.track = track))

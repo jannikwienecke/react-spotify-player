@@ -3,27 +3,18 @@ import {
   useListBox,
 } from '@bit/jannikwienecke.personal.react-listbox'
 import React from 'react'
-import { useFullTracks } from '../hooks/useFullTrack'
 import { usePlayerStore } from '../hooks/usePlayerStore'
-import { useQueueStore } from '../hooks/useQueueStore'
-
 import { getArtistsString, getTrackString } from '../utils'
-import { usePlayFromQueue } from './usePlayFromQueue'
-import { usePlayFromStack } from './usePlayFromStack'
+import { usePlayFromContext } from './usePlayFromContext'
+import { usePreviousPlayedTracks } from './usePreviousPlayedTracks'
+import { useQueueStore } from './useQueueStore'
 
 export const useSpotifySongInfoPlaylist = () => {
   const defaultItem: ListItem = { name: 'HI', id: '123', isActive: true }
-
-  const { queue, stackPastSongs } = useQueueStore()
   const { track } = usePlayerStore()
-  const {
-    tracksFull: tracksFullPast,
-    getFullTracks: getFullTracksPast,
-  } = useFullTracks()
-  const { tracksFull, getFullTracks } = useFullTracks()
-  const { playFromQueue } = usePlayFromQueue()
-  const { playFromStack } = usePlayFromStack()
-
+  const { queue } = useQueueStore()
+  const { playFromContext } = usePlayFromContext()
+  const { data: previousPlayedTracks } = usePreviousPlayedTracks()
   const [listItems, setListItems] = React.useState<ListItem[]>([defaultItem])
 
   const _getListItems = (
@@ -58,45 +49,22 @@ export const useSpotifySongInfoPlaylist = () => {
     listItems,
     onChange: (activeItem: ListItem) => {
       if (track?.item && track?.item.id === activeItem.id) {
-        playFromQueue(track.item)
-      } else if (tracksFullPast && tracksFull) {
-        let trackFullActiveItem = tracksFull?.find(
+        playFromContext(track.item)
+      } else if (queue) {
+        let newTrack = queue.find(track => track.id === activeItem.id)
+        if (newTrack) playFromContext(newTrack)
+      } else if (previousPlayedTracks) {
+        let newTrack = previousPlayedTracks.find(
           track => track.id === activeItem.id,
         )
-        if (trackFullActiveItem) playFromQueue(trackFullActiveItem)
-
-        trackFullActiveItem = tracksFullPast?.find(
-          track => track.id === activeItem.id,
-        )
-        if (trackFullActiveItem) playFromStack(trackFullActiveItem)
+        if (newTrack) playFromContext(newTrack)
       }
     },
   })
 
   React.useEffect(() => {
-    if (!track?.item) return
-
-    const trackFullPast_ =
-      !tracksFullPast || tracksFullPast.length === 0 ? [] : tracksFullPast
-    const trackFullQueue_ =
-      !tracksFull || tracksFull.length === 0 ? [] : tracksFull
-
-    setListItems(
-      _getListItems([...trackFullPast_, track.item, ...trackFullQueue_]),
-    )
-  }, [track?.item?.id, tracksFull, tracksFullPast])
-
-  React.useEffect(() => {
-    if (!queue) return
-
-    getFullTracks(queue, tracksFull)
-  }, [queue])
-
-  React.useEffect(() => {
-    if (!stackPastSongs) return
-
-    getFullTracksPast([...stackPastSongs].reverse(), tracksFullPast)
-  }, [stackPastSongs])
+    setListItems(_getListItems([...(previousPlayedTracks || []), ...queue]))
+  }, [queue, previousPlayedTracks, track])
 
   return { value, listItems, handleChange }
 }

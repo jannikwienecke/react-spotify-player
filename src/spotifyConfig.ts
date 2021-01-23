@@ -32,6 +32,7 @@ const scopes = [
   'user-library-read',
   'user-read-email',
   'user-read-private',
+  'user-read-recently-played',
 ]
 
 const SPOTIFY_AUTH_URL = `${authEndpoint}?client_id=${clientId}&state=${'jdaoisjdioas'}&redirect_uri=${redirectUri}&scope=${scopes.join(

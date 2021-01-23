@@ -1,14 +1,13 @@
+import { refetchIntervall } from '../spotifyConfig'
 import { useSpotify } from './useSpotify'
-import React from 'react'
 
 export const useCurrentPlayback = () => {
   const { refetch, ...result } = useSpotify<SpotifyApi.CurrentPlaybackResponse>(
     {
       url: 'me/player',
+      refetchInterval: refetchIntervall,
     },
   )
-
-  console.log('result', result)
 
   return { ...result }
 }

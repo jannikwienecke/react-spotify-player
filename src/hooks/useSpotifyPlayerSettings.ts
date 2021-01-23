@@ -2,10 +2,9 @@ import React from 'react'
 import { useDevices } from './useDevices'
 import { useSpotify } from './useInitialSpotify'
 import { usePlayer } from './usePlayer'
-import { useQueueStore } from './useQueueStore'
 
 export const TEMP_TOkEN =
-  'BQD9uEx_QIdvCFy7GpZRpjBrfwndjVhc-x5CQoggK5Mp1Hl6I9XR1F3b6ITRzGEbzQqmhtLmJbXgEqMLqxlbvNnI-ttWcw75lw_umjqJZEfRSAn1FQJ_XM5_XqPzdKUFWlRQ0r7fj4C_83YTvlnvM729ZrfKcssQobNBVZutfmKutfU8z8EDOli1Im0uzya9spNNJX3698d_gOUscMaP9-m8X0yqBNZUwh50tFHwlK6tT8gg_odUM63YKz-mjsNSdURshMaSRWysvw'
+  'BQDxXElYKYjbzag6iabGlUX2PiIxheDZFtHPY88SojOwOJy9vrBZ4unVmyZk0xWx2fAXSoKK8MrQL7bBzskY6U3K2F1Bln-FNS3N3w5yu3DOxM7AS7ohdCP2CI5nyAIbxnLpIVt8PfedKOXv3xSAxG5KBRbfcsAvscWjn3-d_n4jkjKAXYVZwric12n9YXXHQfhGBMfiReDCHNqY8Cc9Q0NTxiL9nbFS0W-_TP3_2lWMtDEyZabzjvnwTKp3qO8e0GWQ-MS_qE-EBf99'
 export const useSpotifyPlayerSettings = () => {
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>()
 

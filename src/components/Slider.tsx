@@ -1,6 +1,7 @@
+import React from 'react'
 import Slider, { useSlider } from '@bit/jannikwienecke.personal.react-slider'
 import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist/types'
-import React from 'react'
+import { usePrevious } from '@bit/jannikwienecke.personal.use-previous'
 import { useQueryClient } from 'react-query'
 import { usePlayerStore } from '../hooks/usePlayerStore'
 import { useSeekPosition } from '../hooks/useSeekPosition'
@@ -14,6 +15,7 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
   handleClickNext,
 }) => {
   const {
+    nextTrack,
     track,
     setGetStateFunc,
     playerCounter,
@@ -22,25 +24,46 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
   } = usePlayerStore()
   const queryClient = useQueryClient()
   const { seekToPosition, statusSeekToPosition } = useSeekPosition()
-
+  const [currentTrack, setCurrentTrack] = React.useState(track?.item)
   const [currentState, setCurrentState] = React.useState<StateSliderProps>({
     currentMsSong: 0,
-    totalMsSong: 200000,
+    totalMsSong: 250000,
     currentMediaId: '1',
     isPlaying: false,
   })
 
+  React.useEffect(() => {
+    if (nextTrack?.id) {
+      setCurrentTrack(nextTrack)
+    }
+  }, [nextTrack?.id])
+
+  React.useEffect(() => {
+    if (track?.item?.id) {
+      setCurrentTrack(track.item)
+    }
+  }, [track?.item?.id])
+
   const ignoreStateChangeRef = React.useRef(false)
+  const ignoreStateChangeRef2 = React.useRef(false)
+  const prevTrackId = usePrevious(track?.item?.id)
   React.useEffect(() => {
     if (playerCounter) {
-      ignoreStateChangeRef.current = true
       let newMs = 0
+      let newIsPlaying = null
 
+      if (ignoreStateChangeRef2.current && prevTrackId !== track?.item?.id) {
+        ignoreStateChangeRef2.current = false
+        return
+      } else if (ignoreStateChangeRef2.current) {
+        return
+      }
       if (lastAction === 'change') {
         newMs = newMs === currentState.currentMsSong ? 1 : 0
-      } else if (lastAction === 'pause') {
-        newMs = currentState.currentMsSong
+        newIsPlaying = isPlaying
+        ignoreStateChangeRef2.current = true
       } else if (lastAction === 'songUpdate') {
+        newIsPlaying = isPlaying
         if (manualMsChangeRef.current) {
           manualMsChangeRef.current = false
           return
@@ -49,14 +72,15 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
       } else {
         console.warn('ERRROR!!!')
       }
+
       setCurrentState({
         ...currentState,
-        isPlaying: lastAction === 'change' ? false : isPlaying,
+        isPlaying: newIsPlaying || false,
         currentMsSong: newMs,
-        totalMsSong: track?.item?.duration_ms || 250000,
+        totalMsSong: currentTrack?.duration_ms || 250000,
       })
     }
-  }, [playerCounter])
+  }, [playerCounter, prevTrackId])
 
   const onSettledChange = async () => {
     await queryClient.invalidateQueries()
@@ -68,8 +92,8 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
     seekToPosition(ms)
   }
 
-  const mediaId = track?.item?.id ? track.item.id : 'abc'
-  const totalMs = track?.item?.duration_ms || 0
+  const mediaId = currentTrack?.id ? currentTrack.id : ''
+  const totalMs = currentTrack?.duration_ms || 0
 
   const { state, handleDragStart, handleMsChange, getState } = useSlider({
     isPlaying: isPlaying || false,
@@ -83,14 +107,17 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
   })
 
   React.useEffect(() => {
+    if (ignoreStateChangeRef2.current) return
     if (state) {
       if (ignoreStateChangeRef.current) {
         ignoreStateChangeRef.current = false
 
-        setCurrentState({
-          ...currentState,
-          isPlaying: state.isPlaying,
-          currentMediaId: state.currentMediaId,
+        setCurrentState(prevState => {
+          return {
+            ...prevState,
+            isPlaying: state.isPlaying,
+            currentMediaId: state.currentMediaId,
+          }
         })
       } else {
         setCurrentState({ ...state })
@@ -103,14 +130,23 @@ export const MusicSlider: React.FC<MusicSliderProps> = ({
   }, [])
 
   React.useEffect(() => {
+    if (ignoreStateChangeRef2.current) return
     if (track?.is_playing !== currentState.isPlaying) {
-      setCurrentState({
-        ...currentState,
-        isPlaying: track?.is_playing || state.isPlaying,
+      console.log('track', track)
+
+      setCurrentState(prevState => {
+        console.log('set state3')
+        return {
+          ...prevState,
+          isPlaying: track?.is_playing || state.isPlaying,
+        }
       })
     }
-  }, [track])
+  }, [track?.is_playing])
 
+  // React.useEffect(() => {
+  //   console.log('currentState: ', currentState)
+  // }, [currentState])
   return (
     <Slider
       state={currentState}

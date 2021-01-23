@@ -1,29 +1,31 @@
 import React from 'react'
-import { usePlay } from './usePlay'
-import { useQueueStore } from './useQueueStore'
+import { usePlayerStore } from './usePlayerStore'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
 import { useSpotifyMutation } from './useSpotify'
 
 export const usePlayPrevious = () => {
+  const { pause, updatePlayer, setAction } = usePlayerStore()
   const url = 'me/player/previous'
-  const { getLastElement, stackPastSongs } = useQueueStore()
-  const { play, status: statusPlaySong } = usePlay()
 
-  const { mutate, error, ...result } = useSpotifyMutation<null>({
+  const {
+    mutate,
+    error,
+    status: statusPlayPreviousTrack,
+    ...result
+  } = useSpotifyMutation<null>({
     url,
     method: 'POST',
   })
 
-  useRefetchCurrentSong(statusPlaySong)
+  useRefetchCurrentSong(statusPlayPreviousTrack, () => {
+    updatePlayer()
+    pause()
+    setAction('change')
+  })
 
   const playPreviousTrack = React.useCallback(() => {
-    const lastTrack = getLastElement(stackPastSongs)
-    if (lastTrack) {
-      play([lastTrack.uri])
-    } else {
-      mutate({})
-    }
-  }, [stackPastSongs])
+    mutate({})
+  }, [])
 
-  return { ...result, playPreviousTrack, stackPastSongs }
+  return { ...result, playPreviousTrack }
 }

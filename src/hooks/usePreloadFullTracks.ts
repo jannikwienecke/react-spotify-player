@@ -32,7 +32,6 @@ export const usePreloadFullTracks = () => {
 
   React.useEffect(() => {
     if (!tracksFull) return
-    console.log('tracksFull: ', tracksFull)
     setPreloadedFullTrack(tracksFull)
   }, [tracksFull])
 }
