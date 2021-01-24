@@ -17,8 +17,6 @@ export const useCurrentContext = () => {
   const { getFullTracks, tracksFull: tracksFullAlbum } = useFullTracks()
 
   React.useEffect(() => {
-    console.log('currentPlayback', currentPlayback)
-
     const contextUri = currentPlayback?.context?.uri
     if (!contextUri) {
       store.setNewQueue([])

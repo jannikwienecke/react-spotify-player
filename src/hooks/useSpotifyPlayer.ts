@@ -2,12 +2,13 @@ import React from 'react'
 import { useQueryClient } from 'react-query'
 import { useCurrentContext } from './useCurrentContext'
 import { currentSongUrl, useCurrentSong } from './useCurrentSong'
-import { useHandlePlayerChanges } from './useHandlePlayerChanges'
+import { useDevices } from './useDevices'
 import { useLocalDeviceStore } from './useLocalDeviceStore'
 import { useNext } from './useNextSong'
 import { usePause } from './usePause'
 import { usePlay } from './usePlay'
 import { usePlayerStore } from './usePlayerStore'
+import { usePlayFromContext } from './usePlayFromContext'
 import { usePlayPrevious } from './usePlayPrevious'
 import { usePreloadFullTracks } from './usePreloadFullTracks'
 import { useQueueStore } from './useQueueStore'
@@ -23,21 +24,25 @@ export const useSpotifyPlayer = () => {
     setTrack,
     setAction,
     track,
-    updatePlayer,
+    setLoading,
   } = usePlayerStore()
   const { play: playSongs } = usePlay()
+  const { playFromContext } = usePlayFromContext()
   const { pause: pauseSong } = usePause()
   const { playNextSong } = useNext()
   const { playPreviousTrack } = usePlayPrevious()
-  const { deviceIsReady } = useLocalDeviceStore()
+  const { deviceIsReady, deviceId } = useLocalDeviceStore()
   usePreloadFullTracks()
   const queryClient = useQueryClient()
   const { token } = useSpotifyToken()
+  const { firstTrackId } = usePlayerStore()
+  const { getActiveDeviceId } = useDevices()
 
   const handleClickPlay = () => {
     pauseRef.current = false
     if (track) {
-      console.log('play songs..')
+      setAction('opt_play')
+      setLoading(true)
       playSongs()
     } else {
       console.log('play next songs')
@@ -47,8 +52,8 @@ export const useSpotifyPlayer = () => {
 
   const pauseRef = React.useRef(false)
   const handleClickPause = () => {
-    console.log('click pause')
-
+    setAction('opt_pause')
+    setLoading(true)
     pauseSong()
     pauseRef.current = true
     setTimeout(() => {
@@ -57,13 +62,28 @@ export const useSpotifyPlayer = () => {
   }
 
   const handleClickNext = () => {
+    setAction('opt_next_track')
+    setLoading(true)
     playNextSong()
-    setAction('change')
   }
 
   const handleClickPrevious = () => {
-    playPreviousTrack()
-    setAction('change')
+    if (!track?.item) return
+
+    const playingOnThisPlayer = deviceId === getActiveDeviceId()
+    const playSameTrackFromStart =
+      track?.progress_ms && track?.progress_ms > 5000
+
+    if (
+      (playingOnThisPlayer && track?.item?.id === firstTrackId) ||
+      playSameTrackFromStart
+    ) {
+      playFromContext(track?.item)
+    } else {
+      setAction('opt_previous_track')
+      setLoading(true)
+      playPreviousTrack()
+    }
   }
 
   const hasCurrentSongRef = React.useRef<boolean>(false)
@@ -90,7 +110,6 @@ export const useSpotifyPlayer = () => {
   }, [track])
 
   React.useEffect(() => {
-    setAction('songUpdate')
     setTrack(currentSong)
   }, [currentSong])
 

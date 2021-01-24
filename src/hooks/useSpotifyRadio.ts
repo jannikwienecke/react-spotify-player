@@ -1,6 +1,5 @@
 import React from 'react'
 import { PropsNewPlaylist, useCreatePlaylist } from './useCreatePlaylist'
-import { usePause } from './usePause'
 import { usePlayerStore } from './usePlayerStore'
 import { useRecommendations } from './useRecommendations'
 
@@ -9,13 +8,7 @@ export const useSpotifyRadio = () => {
   const { createNewPlaylist } = useCreatePlaylist()
   const makeRequestRef = React.useRef<boolean>(false)
   const [nextSong] = React.useState<SpotifyApi.TrackObjectSimplified>()
-  const {
-    setAction,
-    updatePlayer,
-    pause: pauseStore,
-    isPlaying,
-  } = usePlayerStore()
-  const { pause } = usePause()
+  const { pause: pauseStore, setAction, setLoading } = usePlayerStore()
 
   const newPlaylistOptionsRef = React.useRef<PropsNewPlaylist | undefined>()
   const setNewRadio = (
@@ -23,9 +16,8 @@ export const useSpotifyRadio = () => {
     newPlaylistOptions: PropsNewPlaylist,
   ) => {
     console.log('Start new radio: ', newPlaylistOptions)
-    pauseStore()
-    setAction('change')
-    updatePlayer()
+    setAction('opt_track_change')
+    setLoading(true)
 
     makeRequestRef.current = true
     fetchRecommendations(recommendationsOptions)

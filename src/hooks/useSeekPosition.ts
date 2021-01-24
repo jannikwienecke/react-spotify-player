@@ -1,13 +1,22 @@
 import { useSpotifyMutation } from './useSpotify'
 import React from 'react'
+import { useRefetchCurrentSong } from './useRefetchCurrentSong'
+import { usePlayerStore } from './usePlayerStore'
 
 // interface UsePlayInterface {}
 export const useSeekPosition = () => {
   const [url, setUrl] = React.useState('')
+  const { setAction } = usePlayerStore()
 
-  const { mutate, error, ...resutlt } = useSpotifyMutation<null>({
+  const { mutate, error, ...result } = useSpotifyMutation<null>({
     url,
     method: 'PUT',
+  })
+
+  useRefetchCurrentSong(result.status, () => {
+    console.log('set success ms change....')
+
+    setAction('SUCCESS_MS_CHANGE')
   })
 
   const seekToPosition = (position_ms: number) => {
@@ -25,5 +34,5 @@ export const useSeekPosition = () => {
     if (error) console.error('ERROR seekToPosition: ', error)
   }, [error])
 
-  return { seekToPosition, statusSeekToPosition: resutlt.status }
+  return { seekToPosition, statusSeekToPosition: result.status }
 }

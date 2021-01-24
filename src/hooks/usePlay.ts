@@ -10,12 +10,7 @@ export const usePlay = () => {
   const [contextUri, setContextUri] = React.useState<string | undefined>()
   const { getActiveDeviceId } = useDevices()
   const currentMs = React.useRef(0)
-  const {
-    setAction,
-    updatePlayer,
-    play: playStore,
-    setTrack,
-  } = usePlayerStore()
+  const { setAction } = usePlayerStore()
 
   const { mutate, error, status: statusPlay, ...result } = useSpotifyMutation<
     null
@@ -24,14 +19,8 @@ export const usePlay = () => {
     method: 'PUT',
   })
 
-  // const isResumeRef = React.useRef(false)
   useRefetchCurrentSong(statusPlay, () => {
-    // if (isResumeRef.current) return
-    // console.log('set change..........');
-    // setAction('change')
-    // updatePlayer()
-    // playStore()
-    // setTrack(undefined)
+    setAction('SUCCESS_PLAY')
   })
 
   React.useEffect(() => {
@@ -43,7 +32,7 @@ export const usePlay = () => {
         })
       } else if (uris) {
         mutate({ uris })
-      } else if (currentMs.current) {
+      } else if (currentMs.current !== undefined) {
         mutate({ position_ms: currentMs.current })
       } else {
         console.log('play - no arguments.')
@@ -74,14 +63,18 @@ export const usePlay = () => {
     [getActiveDeviceId],
   )
 
+  const playPlaylistRef = React.useRef(false)
   const playPlaylist = React.useCallback(
     (context_uri?: string) => {
       const activeDevice = getActiveDeviceId()
       if (!activeDevice) return
 
+      console.log('playPlaylist')
+
       const newUrl = `me/player/play?device_id=${activeDevice}`
       setUrl(newUrl)
       setContextUri(context_uri)
+      playPlaylistRef.current = true
     },
     [getActiveDeviceId],
   )
@@ -90,8 +83,6 @@ export const usePlay = () => {
     let err: any = error
     if (err && err?.error?.reason === 'UNKNOWN') {
       if (url) {
-        console.log('mutate....')
-
         mutate(uris)
       }
     }

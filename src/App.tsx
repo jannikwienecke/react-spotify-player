@@ -10,7 +10,10 @@ const App = () => {
       <h1 tw="text-5xl text-center p-10 font-bold text-spotifyGreen">
         REACT SPOTIFY PLAYER
       </h1>
-      <NavPlayer onReady={() => console.log('Music Player Is Ready')} />
+      <NavPlayer
+        visibleOnLoading={true}
+        onReady={() => console.log('Music Player Is Ready')}
+      />
     </div>
   )
 }

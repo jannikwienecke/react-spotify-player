@@ -1,158 +1,178 @@
-import React from 'react'
-import Slider, { useSlider } from '@bit/jannikwienecke.personal.react-slider'
+import Slider from '@bit/jannikwienecke.personal.react-slider'
 import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist/types'
-import { usePrevious } from '@bit/jannikwienecke.personal.use-previous'
-import { useQueryClient } from 'react-query'
-import { usePlayerStore } from '../hooks/usePlayerStore'
+import React from 'react'
+import { actionTypesPlayer, usePlayerStore } from '../hooks/usePlayerStore'
 import { useSeekPosition } from '../hooks/useSeekPosition'
 interface MusicSliderProps {
   fetchCurrentSong: () => void
   handleClickNext: () => void
 }
 
+interface ActionTypes {
+  payload?: { track?: SpotifyApi.TrackObjectFull; ms?: number }
+  actionType: actionTypesPlayer
+  IS_LOADING?: boolean
+  TRACK?: SpotifyApi.TrackObjectFull | undefined | null
+  IS_PLAYING?: boolean
+}
+
+const dispatchSlider = (
+  state: StateSliderProps,
+  action: ActionTypes,
+): StateSliderProps => {
+  const currentMsIsZero = state.currentMsSong === 0
+  const newMsIfZero = currentMsIsZero ? 1 : 0
+  if (action.IS_LOADING) {
+    switch (action.actionType) {
+      case 'opt_play':
+        if (state.isPlaying) return state
+        return { ...state, isPlaying: true }
+      case 'opt_pause':
+        if (!state.isPlaying) return state
+        return { ...state, isPlaying: false }
+      case 'opt_next_track':
+        return { ...state, isPlaying: false, currentMsSong: newMsIfZero }
+      case 'opt_previous_track':
+        if (!state.isPlaying) return state
+        return { ...state, isPlaying: false, currentMsSong: newMsIfZero }
+      case 'opt_track_change':
+        return { ...state, isPlaying: false, currentMsSong: newMsIfZero }
+      default:
+        return state
+    }
+  }
+
+  switch (action.actionType) {
+    case 'play':
+      if (state.isPlaying) return state
+      return { ...state, isPlaying: true }
+    case 'SUCCESS_PLAY':
+      if (state.isPlaying) return state
+      return { ...state, isPlaying: true }
+    case 'pause':
+      if (!state.isPlaying) return state
+      return { ...state, isPlaying: false }
+    case 'SUCCESS_PAUSE':
+      if (!state.isPlaying) return state
+      return { ...state, isPlaying: false }
+    case 'SUCCESS_NEXT_TRACK':
+      return {
+        ...state,
+        isPlaying: action.IS_PLAYING || false,
+        currentMsSong: newMsIfZero,
+      }
+    case 'SUCCESS_PREVIOUS_TRACK':
+      return {
+        ...state,
+        isPlaying: action.IS_PLAYING || false,
+        currentMsSong: newMsIfZero,
+      }
+    case 'ms_change':
+      const newMs = action.payload?.ms
+      if (newMs === undefined) return state
+      return {
+        ...state,
+        currentMsSong: newMs,
+        totalMsSong: action.TRACK?.duration_ms || 100,
+      }
+    case 'track_change':
+      const newTrack = action.payload?.track
+      if (!newTrack) return state
+      if (state.currentMediaId === newTrack?.id) return state
+      return {
+        ...state,
+        currentMediaId: newTrack.id,
+        currentMsSong: newMsIfZero,
+        totalMsSong: newTrack.duration_ms,
+      }
+    default:
+      return state
+  }
+}
+
 export const MusicSlider: React.FC<MusicSliderProps> = ({
-  fetchCurrentSong,
   handleClickNext,
 }) => {
-  const {
-    nextTrack,
-    track,
-    setGetStateFunc,
-    playerCounter,
-    isPlaying,
-    lastAction,
-  } = usePlayerStore()
-  const queryClient = useQueryClient()
-  const { seekToPosition, statusSeekToPosition } = useSeekPosition()
-  const [currentTrack, setCurrentTrack] = React.useState(track?.item)
-  const [currentState, setCurrentState] = React.useState<StateSliderProps>({
-    currentMsSong: 0,
-    totalMsSong: 250000,
-    currentMediaId: '1',
+  const [state, dispatch] = React.useReducer(dispatchSlider, {
     isPlaying: false,
+    currentMediaId: '',
+    currentMsSong: 0,
+    totalMsSong: 100,
   })
 
-  React.useEffect(() => {
-    if (nextTrack?.id) {
-      setCurrentTrack(nextTrack)
-    }
-  }, [nextTrack?.id])
+  const {
+    track,
+    lastAction,
+    IS_LOADING,
+    setLoading,
+    trackIdPrev,
+    setTrackIdPrev,
+    setAction,
+  } = usePlayerStore()
+  const { seekToPosition } = useSeekPosition()
 
-  React.useEffect(() => {
-    if (track?.item?.id) {
-      setCurrentTrack(track.item)
-    }
-  }, [track?.item?.id])
-
-  const ignoreStateChangeRef = React.useRef(false)
-  const ignoreStateChangeRef2 = React.useRef(false)
-  const prevTrackId = usePrevious(track?.item?.id)
-  React.useEffect(() => {
-    if (playerCounter) {
-      let newMs = 0
-      let newIsPlaying = null
-
-      if (ignoreStateChangeRef2.current && prevTrackId !== track?.item?.id) {
-        ignoreStateChangeRef2.current = false
-        return
-      } else if (ignoreStateChangeRef2.current) {
-        return
-      }
-      if (lastAction === 'change') {
-        newMs = newMs === currentState.currentMsSong ? 1 : 0
-        newIsPlaying = isPlaying
-        ignoreStateChangeRef2.current = true
-      } else if (lastAction === 'songUpdate') {
-        newIsPlaying = isPlaying
-        if (manualMsChangeRef.current) {
-          manualMsChangeRef.current = false
-          return
-        }
-        newMs = track?.progress_ms || currentState.currentMsSong
-      } else {
-        console.warn('ERRROR!!!')
-      }
-
-      setCurrentState({
-        ...currentState,
-        isPlaying: newIsPlaying || false,
-        currentMsSong: newMs,
-        totalMsSong: currentTrack?.duration_ms || 250000,
-      })
-    }
-  }, [playerCounter, prevTrackId])
-
-  const onSettledChange = async () => {
-    await queryClient.invalidateQueries()
-    fetchCurrentSong()
-  }
-  const manualMsChangeRef = React.useRef(false)
-  const onMsChange = async (ms: number) => {
-    manualMsChangeRef.current = true
-    seekToPosition(ms)
+  const dispatchWrapper = (action: ActionTypes) => {
+    dispatch({
+      ...action,
+      IS_LOADING,
+      IS_PLAYING: track?.is_playing,
+      TRACK: track?.item,
+    })
   }
 
-  const mediaId = currentTrack?.id ? currentTrack.id : ''
-  const totalMs = currentTrack?.duration_ms || 0
-
-  const { state, handleDragStart, handleMsChange, getState } = useSlider({
-    isPlaying: isPlaying || false,
-    currentMsSong: currentState.currentMsSong || 0,
-    media: { mediaId, totalMs },
-    statusRequestMsChange: statusSeekToPosition,
-    stateUpdateIntervall: 3000,
-    onSettledChange,
-    onMsChange,
-    onEnd: handleClickNext,
-  })
-
   React.useEffect(() => {
-    if (ignoreStateChangeRef2.current) return
-    if (state) {
-      if (ignoreStateChangeRef.current) {
-        ignoreStateChangeRef.current = false
-
-        setCurrentState(prevState => {
-          return {
-            ...prevState,
-            isPlaying: state.isPlaying,
-            currentMediaId: state.currentMediaId,
-          }
-        })
-      } else {
-        setCurrentState({ ...state })
-      }
-    }
-  }, [state])
-
-  React.useEffect(() => {
-    setGetStateFunc(getState)
-  }, [])
-
-  React.useEffect(() => {
-    if (ignoreStateChangeRef2.current) return
-    if (track?.is_playing !== currentState.isPlaying) {
-      console.log('track', track)
-
-      setCurrentState(prevState => {
-        console.log('set state3')
-        return {
-          ...prevState,
-          isPlaying: track?.is_playing || state.isPlaying,
-        }
-      })
+    if (track?.is_playing) {
+      dispatchWrapper({ actionType: 'play' })
+    } else {
+      dispatchWrapper({ actionType: 'pause' })
     }
   }, [track?.is_playing])
 
+  React.useEffect(() => {
+    if (track?.item?.id) {
+      dispatchWrapper({
+        actionType: 'track_change',
+        payload: { track: track.item },
+      })
+    }
+  }, [track?.item?.id])
+
+  React.useEffect(() => {
+    if (track?.progress_ms) {
+      if (track?.item?.id === trackIdPrev) {
+        return
+      } else {
+        setTrackIdPrev('')
+      }
+
+      dispatchWrapper({
+        actionType: 'ms_change',
+        payload: { ms: track.progress_ms },
+      })
+    }
+  }, [track?.progress_ms])
+
+  React.useEffect(() => {
+    if (!lastAction) return
+    dispatchWrapper({ actionType: lastAction })
+    setAction('')
+  }, [lastAction])
+
   // React.useEffect(() => {
-  //   console.log('currentState: ', currentState)
-  // }, [currentState])
+  //   console.log('state: ', state)
+  // }, [state])
+
   return (
     <Slider
-      state={currentState}
-      onDragStart={handleDragStart}
+      state={state}
+      onDragStart={() => {
+        setLoading(true)
+      }}
       onEnd={handleClickNext}
-      onChange={handleMsChange}
+      onChange={ms => {
+        setLoading(true)
+        seekToPosition(ms)
+      }}
       stylesSlider={{ height: '6px' }}
       disable={false}
     />

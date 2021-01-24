@@ -21,7 +21,9 @@ export const useQueueStore = create<Queue>(
       set(state => void (state.queue = [...state.queue, track])),
     addManyToQueue: tracks =>
       set(state => void (state.queue = [...state.queue, ...tracks])),
-    setNewQueue: tracks => set(state => void (state.queue = [...tracks])),
+    setNewQueue: tracks => {
+      set(state => void (state.queue = [...tracks]))
+    },
     setPreloadedFullTrack: tracks =>
       set(state => void (state.preloadedFullTracks = [...tracks])),
     setNewStack: tracks =>

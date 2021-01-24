@@ -18,13 +18,7 @@ export const useNext = () => {
   const { track, contextUri } = usePlayerStore()
   const { preloadedFullTracks } = useQueueStore()
   const { queue } = useQueueStore()
-  const {
-    play,
-    pause,
-    updatePlayer,
-    setAction,
-    setNextTrack,
-  } = usePlayerStore()
+  const { play, pause, setAction, setNextTrack } = usePlayerStore()
 
   const {
     mutate: playNextTrack,
@@ -37,7 +31,7 @@ export const useNext = () => {
   })
 
   useRefetchCurrentSong(statusPlayNextTrack, () => {
-    play()
+    setAction('SUCCESS_NEXT_TRACK')
   })
 
   const playNextSong = React.useCallback(() => {
@@ -46,19 +40,12 @@ export const useNext = () => {
     if (contextUri) {
       const trackQueue = queue.find(track_ => track_.id === track?.item?.id)
       if (trackQueue) {
-        console.log('trackQueue: ', trackQueue)
-        console.log('queue: ', queue)
         const indexCurrentSong = queue.indexOf(trackQueue)
-        console.log('indexCurrentSong', indexCurrentSong)
         if (queue.length >= indexCurrentSong) {
           setNextTrack(queue[indexCurrentSong + 1])
-          console.log('set new track', queue[indexCurrentSong + 1])
         }
       }
-      // setNextTrack()
       pause()
-      setAction('change')
-      updatePlayer()
       playNextTrack({})
     } else if (track) {
       console.log('new RADIO START 1')

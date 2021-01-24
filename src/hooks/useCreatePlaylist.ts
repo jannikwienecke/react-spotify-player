@@ -6,6 +6,7 @@ import { useValidMutation } from './useValidMutation'
 import { usePlay } from './usePlay'
 import { usePlaylistStore } from './usePlaylistStore'
 import { useUnfollowPlaylist } from './useRemovePlaylist'
+import { usePlayPlaylist } from './usePlayPlaylist'
 
 export interface PropsNewPlaylist {
   name: string
@@ -19,7 +20,7 @@ export const useCreatePlaylist = () => {
   const { getPlaylist, data: playlist } = useGetPlaylist()
   const { unfollowPlaylist } = useUnfollowPlaylist()
   const { setPlaylist } = usePlaylistStore()
-  const { playPlaylist } = usePlay()
+  const { playPlaylist } = usePlayPlaylist()
   const [urlCreatePlaylist, setUrlCreatePlaylist] = React.useState('')
   const [urlAddSongsPlaylist, setUrlAddSongsPlaylist] = React.useState('')
 

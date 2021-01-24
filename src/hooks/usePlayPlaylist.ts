@@ -4,12 +4,11 @@ import { usePlayerStore } from './usePlayerStore'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
 import { useSpotifyMutation } from './useSpotify'
 
-export const usePlayFromContext = () => {
-  const [uri, setUri] = React.useState<string | undefined>()
+export const usePlayPlaylist = () => {
   const [url, setUrl] = React.useState<string>('')
-  const { setAction, setLoading } = usePlayerStore()
-  const { contextUri: context_uri, setNextTrack } = usePlayerStore()
+  const [contextUri, setContextUri] = React.useState<string | undefined>()
   const { getActiveDeviceId } = useDevices()
+  const { setAction } = usePlayerStore()
 
   const { mutate, error, status: statusPlay, ...result } = useSpotifyMutation<
     null
@@ -22,29 +21,35 @@ export const usePlayFromContext = () => {
     setAction('SUCCESS_PLAY')
   })
 
-  const playFromContext = React.useCallback(
-    (newTrack: SpotifyApi.TrackObjectFull) => {
+  React.useEffect(() => {
+    if (!url || !contextUri) return
+    mutate({ context_uri: contextUri })
+  }, [url, mutate, contextUri])
+
+  const playPlaylist = React.useCallback(
+    (context_uri?: string) => {
       const activeDevice = getActiveDeviceId()
       if (!activeDevice) return
 
-      setAction('opt_track_change')
-      setLoading(true)
-
-      setNextTrack(newTrack)
+      console.log('playPlaylist')
 
       const newUrl = `me/player/play?device_id=${activeDevice}`
       setUrl(newUrl)
-      setUri(newTrack.uri)
+      setContextUri(context_uri)
     },
     [getActiveDeviceId],
   )
 
   React.useEffect(() => {
-    if (!url || !uri) return
-    mutate({ offset: { uri }, context_uri })
-    setUri('')
-    setUrl('')
-  }, [url, mutate, uri])
+    let err: any = error
+    if (err && err?.error?.reason === 'UNKNOWN') {
+      if (url) {
+        console.log('mutate....')
 
-  return { playFromContext, ...result }
+        mutate({ context_uri: contextUri })
+      }
+    }
+  }, [error])
+
+  return { ...result, status, playPlaylist }
 }
