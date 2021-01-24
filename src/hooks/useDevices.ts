@@ -6,14 +6,14 @@ import { useLocalDeviceStore } from './useLocalDeviceStore'
 import { useValidMutation } from './useValidMutation'
 import { usePlayerStore } from './usePlayerStore'
 
+export const devicesUrl = 'me/player/devices'
 export const useDevices = () => {
-  const url = 'me/player/devices'
   type devicesType = SpotifyApi.UserDevicesResponse
   const { transferPlaybackToDevices, statusTransferPlayback } = usePlayer()
   const { track } = usePlayerStore()
   const { deviceId, setDeviceIsReady } = useLocalDeviceStore()
   const { refetch, ...result } = useSpotify<devicesType>({
-    url,
+    url: devicesUrl,
     refetchInterval: refetchIntervall,
   })
 

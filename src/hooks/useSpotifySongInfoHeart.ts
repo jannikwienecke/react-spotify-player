@@ -3,6 +3,7 @@ import React from 'react'
 import { useSavedTracks } from '../hooks/useSavedTracks'
 import { useSaveTrack } from '../hooks/useSaveTrack'
 import { useValidMutation } from '../hooks/useValidMutation'
+import { useAlertStore } from './useAlertStore'
 
 export const useSpotifySongInfoHeart = (songId: string) => {
   const [hover, setHover] = React.useState(false)
@@ -10,6 +11,7 @@ export const useSpotifySongInfoHeart = (songId: string) => {
   const intervalRef = React.useRef<number>()
 
   const { saveTracks, statusSaveTrack } = useSaveTrack()
+  const { setAlert } = useAlertStore()
   const { data: isSavedList, refetch: refetchSavedTracks } = useSavedTracks([
     songId,
   ])
@@ -17,6 +19,10 @@ export const useSpotifySongInfoHeart = (songId: string) => {
   useValidMutation(statusSaveTrack, () => {
     refetchSavedTracks()
     setHover(false)
+    const msgAdded = 'Track was added to your favorites'
+    const msgRemoved = 'Track was removed from your favorites'
+    const alertMsg = songIsSaved ? msgRemoved : msgAdded
+    setAlert(alertMsg)
   })
 
   React.useEffect(() => {

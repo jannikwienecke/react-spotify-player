@@ -8,7 +8,7 @@ export const useSpotifyRadio = () => {
   const { createNewPlaylist } = useCreatePlaylist()
   const makeRequestRef = React.useRef<boolean>(false)
   const [nextSong] = React.useState<SpotifyApi.TrackObjectSimplified>()
-  const { pause: pauseStore, setAction, setLoading } = usePlayerStore()
+  const { setAction, setLoading } = usePlayerStore()
 
   const newPlaylistOptionsRef = React.useRef<PropsNewPlaylist | undefined>()
   const setNewRadio = (

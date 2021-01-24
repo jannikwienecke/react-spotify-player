@@ -1,12 +1,14 @@
-import React from 'react'
-import { SpotifyTokenContext } from '../Context'
+import create from 'zustand'
+import { immerMiddleware } from '../utils'
 
-export const useSpotifyToken = () => {
-  const context = React.useContext(SpotifyTokenContext)
-  if (context === undefined || context === null) {
-    throw new Error(
-      `useSpotifyToken must be used within a AppProvider (SpotifyTokenProvider)`,
-    )
-  }
-  return context
+export type TokenStore = {
+  token: string
+  setToken: (token: string) => void
 }
+
+export const useSpotifyToken = create<TokenStore>(
+  immerMiddleware(set => ({
+    token: '',
+    setToken: token => set(state => void (state.token = token)),
+  })),
+)

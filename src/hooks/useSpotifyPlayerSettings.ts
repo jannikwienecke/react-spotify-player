@@ -2,16 +2,15 @@ import React from 'react'
 import { useDevices } from './useDevices'
 import { useSpotify } from './useInitialSpotify'
 import { usePlayer } from './usePlayer'
-
-export const TEMP_TOkEN =
-  'BQB_7JAWIY6xLgyZ4kRlfcHntkuncms9ekGnWg8p1tDV-3GY53ADxOpGhR5iycOX_Tz57Og_BVsCdR4RXi_721RZ41i_O08eOgObuKtaDiYc8I_YsFLV8SlJFSMJUGLegW0a_KrqWy7p1oHGw1399puRSU7KSF6W3HLR23uFh5ePVo0J5f9jkWv9NBdTV3evu2xX6bZnyUwlcvPxL_meCUa178h7refiq6L16Fi9lUA7Wn9dsoJAUIeYTyN4kD_2g4jpBn82SmMSDKv7'
+import { useSpotifyToken } from './useSpotifyToken'
 
 export const useSpotifyPlayerSettings = () => {
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>()
 
-  useSpotify(TEMP_TOkEN)
+  const { token } = useSpotifyToken()
+  const initSpotifyPlayer = useSpotify(token)
 
-  const { data: dataDevices, refetch } = useDevices()
+  const { data: dataDevices } = useDevices()
   const { transferPlaybackToDevices } = usePlayer()
 
   // SETS NEW CURRENTDEVICE WHEN CHANGED OR WHEN LOADED AT THE START
@@ -25,10 +24,12 @@ export const useSpotifyPlayerSettings = () => {
   const changeMediaPlayer = React.useCallback((deviceId: string | null) => {
     if (!deviceId) return
     transferPlaybackToDevices([deviceId])
-    setTimeout(() => {
-      refetch()
-    }, 10000)
   }, [])
+
+  React.useEffect(() => {
+    if (!token) return
+    initSpotifyPlayer(token)
+  }, [token])
 
   return {
     devices: dataDevices?.devices,

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAlertStore } from './useAlertStore'
 import { useDevices } from './useDevices'
 import { usePlayerStore } from './usePlayerStore'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
@@ -8,7 +9,8 @@ export const usePlayPlaylist = () => {
   const [url, setUrl] = React.useState<string>('')
   const [contextUri, setContextUri] = React.useState<string | undefined>()
   const { getActiveDeviceId } = useDevices()
-  const { setAction } = usePlayerStore()
+  const { setAction, setLoadRadio } = usePlayerStore()
+  const { setAlert } = useAlertStore()
 
   const { mutate, error, status: statusPlay, ...result } = useSpotifyMutation<
     null
@@ -19,6 +21,8 @@ export const usePlayPlaylist = () => {
 
   useRefetchCurrentSong(statusPlay, () => {
     setAction('SUCCESS_PLAY')
+    setLoadRadio(false)
+    setAlert('Your Radio Was Loaded ')
   })
 
   React.useEffect(() => {
@@ -30,8 +34,6 @@ export const usePlayPlaylist = () => {
     (context_uri?: string) => {
       const activeDevice = getActiveDeviceId()
       if (!activeDevice) return
-
-      console.log('playPlaylist')
 
       const newUrl = `me/player/play?device_id=${activeDevice}`
       setUrl(newUrl)

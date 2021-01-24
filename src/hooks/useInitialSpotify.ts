@@ -12,11 +12,11 @@ declare global {
   }
 }
 
-export const useSpotify = (token: string) => {
+export const useSpotify = () => {
   const [spotifyContext, setSpotifyContext] = React.useState()
   const { setDeviceId } = useLocalDeviceStore()
 
-  React.useEffect(() => {
+  const initSpotifyPlayer = (token: string) => {
     const script = document.createElement('script')
     script.src = 'https://sdk.scdn.co/spotify-player.js'
     script.async = true
@@ -69,5 +69,7 @@ export const useSpotify = (token: string) => {
       // Connect to the player!
       player.connect()
     }
-  }, [])
+  }
+
+  return initSpotifyPlayer
 }

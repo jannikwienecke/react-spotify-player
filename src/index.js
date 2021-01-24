@@ -11,10 +11,8 @@ export const queryClient = new QueryClient()
 render(
   <>
     <QueryClientProvider client={queryClient}>
-      <AppProvider>
-        <GlobalStyles />
-        <App />
-      </AppProvider>
+      <GlobalStyles />
+      <App />
     </QueryClientProvider>
   </>,
   document.getElementById('root'),

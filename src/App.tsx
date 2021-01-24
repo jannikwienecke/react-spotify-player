@@ -1,6 +1,10 @@
 import React from 'react'
 import { GlobalStyles } from 'twin.macro'
 import NavPlayer from './components/NavPlayer'
+import './index.css'
+
+export const TEMP_TOkEN =
+  'BQDg94SfxP7Bus7QVKXF3JSm0cgl1CWdN5UlCBX5PoBBLIzq81RIcDkA03wLU8XbLbCSm_JJtfxgRPMMInf6xo8RvMzfKVkEAmNvoai6Kv9C8xSFpdt4EDbdCfnvkM0fPUyLwmZwAQ_hfmFp_Hl-LJWc4orSyrNLc-q-udDE58XrUClgeKgEI2V42KwZIlG9OLvNwn7IGmVmlNggtnJ-qCGqdyUMdwtpb4_H9tW-VHYens0m7Ta4sb5fCLI_tAZJ-VSZRksuZWG1ng6X'
 
 const App = () => {
   return (
@@ -13,6 +17,7 @@ const App = () => {
       <NavPlayer
         visibleOnLoading={true}
         onReady={() => console.log('Music Player Is Ready')}
+        token={TEMP_TOkEN}
       />
     </div>
   )

@@ -18,7 +18,7 @@ export const useNext = () => {
   const { track, contextUri } = usePlayerStore()
   const { preloadedFullTracks } = useQueueStore()
   const { queue } = useQueueStore()
-  const { play, pause, setAction, setNextTrack } = usePlayerStore()
+  const { isShuffle, pause, setAction, setNextTrack } = usePlayerStore()
 
   const {
     mutate: playNextTrack,
@@ -41,7 +41,7 @@ export const useNext = () => {
       const trackQueue = queue.find(track_ => track_.id === track?.item?.id)
       if (trackQueue) {
         const indexCurrentSong = queue.indexOf(trackQueue)
-        if (queue.length >= indexCurrentSong) {
+        if (queue.length >= indexCurrentSong && !isShuffle) {
           setNextTrack(queue[indexCurrentSong + 1])
         }
       }

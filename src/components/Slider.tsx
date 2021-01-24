@@ -22,6 +22,7 @@ const dispatchSlider = (
 ): StateSliderProps => {
   const currentMsIsZero = state.currentMsSong === 0
   const newMsIfZero = currentMsIsZero ? 1 : 0
+
   if (action.IS_LOADING) {
     switch (action.actionType) {
       case 'opt_play':

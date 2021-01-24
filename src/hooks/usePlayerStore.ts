@@ -2,6 +2,9 @@ import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist
 import create from 'zustand'
 import { immerMiddleware } from '../utils'
 
+type repeatModes = 'off' | 'track' | 'context'
+const REPEAT_MODES: ['off', 'track', 'context'] = ['off', 'track', 'context']
+
 export type actionTypesPlayer =
   | 'pause'
   | 'play'
@@ -30,7 +33,14 @@ export type Player = {
   contextUri: string
   trackIdPrev: string | undefined
   firstTrackId: string
+  isShuffle: boolean
+  repeatMode: repeatModes
+  nextRepeatMode: repeatModes
+  loadRadio: boolean
   setMs: (ms: number) => void
+  updateRepeatMode: () => void
+  setLoadRadio: (isLoading: boolean) => void
+  toggleShuffle: () => void
   setLoading: (isLoading: boolean) => void
   setTrackIdPrev: (id: string) => void
   setAction: (action: actionTypesPlayer) => void
@@ -56,15 +66,37 @@ export const usePlayerStore = create<Player>(
     currentMs: 0,
     firstTrackId: '',
     IS_LOADING: false,
+    loadRadio: false,
+    isShuffle: false,
+    repeatMode: 'off',
+    nextRepeatMode: 'track',
+    updateRepeatMode: () => {
+      set(
+        state =>
+          void (state.repeatMode =
+            REPEAT_MODES[
+              (REPEAT_MODES.indexOf(state.repeatMode) + 1) % REPEAT_MODES.length
+            ]),
+      )
+      set(
+        state =>
+          void (state.nextRepeatMode =
+            REPEAT_MODES[
+              (REPEAT_MODES.indexOf(state.repeatMode) + 2) % REPEAT_MODES.length
+            ]),
+      )
+    },
     getStateFunc: () => {},
     setGetStateFunc: func => set(state => void (state.getStateFunc = func)),
     setMs: ms => set(state => void (state.currentMs = ms)),
+    setLoadRadio: isLoading => set(state => void (state.loadRadio = isLoading)),
     setTrackIdPrev: trackIdPrev =>
       set(state => void (state.trackIdPrev = trackIdPrev)),
     setLoading: isLoading => set(state => void (state.IS_LOADING = isLoading)),
     setContextUri: contextUri =>
       set(state => void (state.contextUri = contextUri)),
-
+    toggleShuffle: () =>
+      set(state => void (state.isShuffle = !state.isShuffle)),
     setAction: action => {
       if (
         [

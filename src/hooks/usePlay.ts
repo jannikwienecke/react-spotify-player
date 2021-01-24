@@ -7,7 +7,6 @@ import { useSpotifyMutation } from './useSpotify'
 export const usePlay = () => {
   const [url, setUrl] = React.useState<string>('')
   const [uris, setUris] = React.useState<string[] | undefined>()
-  const [contextUri, setContextUri] = React.useState<string | undefined>()
   const { getActiveDeviceId } = useDevices()
   const currentMs = React.useRef(0)
   const { setAction } = usePlayerStore()
@@ -44,12 +43,6 @@ export const usePlay = () => {
     setUrl('')
   }, [url, mutate, uris])
 
-  React.useEffect(() => {
-    if (!url || !contextUri) return
-    mutate({ context_uri: contextUri })
-    currentMs.current = 0
-  }, [url, mutate, contextUri])
-
   const play = React.useCallback(
     (uris?: string[], ms: number = 0) => {
       const activeDevice = getActiveDeviceId()
@@ -63,22 +56,6 @@ export const usePlay = () => {
     [getActiveDeviceId],
   )
 
-  const playPlaylistRef = React.useRef(false)
-  const playPlaylist = React.useCallback(
-    (context_uri?: string) => {
-      const activeDevice = getActiveDeviceId()
-      if (!activeDevice) return
-
-      console.log('playPlaylist')
-
-      const newUrl = `me/player/play?device_id=${activeDevice}`
-      setUrl(newUrl)
-      setContextUri(context_uri)
-      playPlaylistRef.current = true
-    },
-    [getActiveDeviceId],
-  )
-
   React.useEffect(() => {
     let err: any = error
     if (err && err?.error?.reason === 'UNKNOWN') {
@@ -88,5 +65,5 @@ export const usePlay = () => {
     }
   }, [error])
 
-  return { ...result, status, play, playPlaylist }
+  return { ...result, status, play }
 }

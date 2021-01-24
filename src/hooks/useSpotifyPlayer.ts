@@ -12,6 +12,8 @@ import { usePlayFromContext } from './usePlayFromContext'
 import { usePlayPrevious } from './usePlayPrevious'
 import { usePreloadFullTracks } from './usePreloadFullTracks'
 import { useQueueStore } from './useQueueStore'
+import { useRandom } from './useRandom'
+import { useRepeat } from './useRepeat'
 import { useSpotifyToken } from './useSpotifyToken'
 
 export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
@@ -39,6 +41,8 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
   const { deviceIsReady, deviceId } = useLocalDeviceStore()
   const [isLoading, setIsLoading] = React.useState(true)
   const isReady = React.useRef(false)
+  const { toggleShuffle } = useRandom()
+  const { updateRepeatMode } = useRepeat()
   usePreloadFullTracks()
 
   const handleClickPlay = () => {
@@ -87,6 +91,14 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
       setLoading(true)
       playPreviousTrack()
     }
+  }
+
+  const handleClickShuffle = () => {
+    toggleShuffle()
+  }
+  const handleClickRepeat = () => {
+    console.log('repeat...')
+    updateRepeatMode()
   }
 
   const hasCurrentSongRef = React.useRef<boolean>(false)
@@ -174,6 +186,8 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
     handleClickPause,
     handleClickNext,
     handleClickPrevious,
+    handleClickShuffle,
+    handleClickRepeat,
     fetchCurrentSong,
     queue,
     isLoading,
