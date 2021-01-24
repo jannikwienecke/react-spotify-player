@@ -14,7 +14,7 @@ import { usePreloadFullTracks } from './usePreloadFullTracks'
 import { useQueueStore } from './useQueueStore'
 import { useSpotifyToken } from './useSpotifyToken'
 
-export const useSpotifyPlayer = () => {
+export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
   const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
   useCurrentContext()
   const { queue } = useQueueStore()
@@ -25,18 +25,21 @@ export const useSpotifyPlayer = () => {
     setAction,
     track,
     setLoading,
+    isPlaying,
   } = usePlayerStore()
   const { play: playSongs } = usePlay()
   const { playFromContext } = usePlayFromContext()
   const { pause: pauseSong } = usePause()
   const { playNextSong } = useNext()
   const { playPreviousTrack } = usePlayPrevious()
-  const { deviceIsReady, deviceId } = useLocalDeviceStore()
-  usePreloadFullTracks()
   const queryClient = useQueryClient()
   const { token } = useSpotifyToken()
   const { firstTrackId } = usePlayerStore()
   const { getActiveDeviceId } = useDevices()
+  const { deviceIsReady, deviceId } = useLocalDeviceStore()
+  const [isLoading, setIsLoading] = React.useState(true)
+  const isReady = React.useRef(false)
+  usePreloadFullTracks()
 
   const handleClickPlay = () => {
     pauseRef.current = false
@@ -158,6 +161,14 @@ export const useSpotifyPlayer = () => {
     fetchCurrentSongInterval()
   }, [])
 
+  React.useEffect(() => {
+    if (deviceId && deviceIsReady && track && !isReady.current) {
+      isReady.current = true
+      setIsLoading(false)
+      onReady && onReady()
+    }
+  }, [deviceIsReady, deviceId, track])
+
   return {
     handleClickPlay,
     handleClickPause,
@@ -165,5 +176,8 @@ export const useSpotifyPlayer = () => {
     handleClickPrevious,
     fetchCurrentSong,
     queue,
+    isLoading,
+    track,
+    isPlaying,
   }
 }
