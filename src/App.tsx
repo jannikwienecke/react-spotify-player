@@ -4,6 +4,7 @@ import ReactSpotifyPlayer from './components/NavPlayer'
 import './index.css'
 
 const App = () => {
+  // console.log('process.env.REACT_APP_TOKEN', process.env.REACT_APP_TOKEN)
   return (
     <div tw="h-screen bg-gray-200 flex flex-col justify-end">
       <GlobalStyles />
