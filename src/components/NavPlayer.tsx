@@ -19,12 +19,12 @@ import { WrapperProgressBar } from './WrapperProgressBar'
 import { WrapperTrackInfo } from './WrapperTrackInfo'
 
 interface PropsSpotifyPlayer {
-  onReady: () => void
-  visibleOnLoading: boolean
+  onReady?: () => void
+  visibleOnLoading?: boolean
   token: string
 }
 
-const SpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
+const ReactSpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
   onReady,
   visibleOnLoading = false,
   token,
@@ -73,4 +73,4 @@ const SpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
   )
 }
 
-export default SpotifyPlayer
+export default ReactSpotifyPlayer

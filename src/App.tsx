@@ -1,6 +1,6 @@
 import React from 'react'
 import { GlobalStyles } from 'twin.macro'
-import NavPlayer from './components/NavPlayer'
+import ReactSpotifyPlayer from './components/NavPlayer'
 import './index.css'
 
 export const TEMP_TOkEN =
@@ -13,7 +13,7 @@ const App = () => {
       <h1 tw="text-5xl text-center p-10 font-bold text-spotifyGreen">
         REACT SPOTIFY PLAYER
       </h1>
-      <NavPlayer
+      <ReactSpotifyPlayer
         visibleOnLoading={true}
         onReady={() => console.log('Music Player Is Ready')}
         token={TEMP_TOkEN}

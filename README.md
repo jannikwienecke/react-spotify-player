@@ -2,6 +2,26 @@
 
 ## Player to control your spotify web application
 
+## Usage
+
+```jsx
+<ReactSpotifyPlayer
+  visibleOnLoading={true}
+  onReady={() => console.log('Music Player Is Ready')}
+  token={TEMP_TOkEN}
+/>
+```
+
+## Props ReactSpotifyPlayer
+
+| name             | type     | description |
+| ---------------- | -------- | ----------- |
+| visibleOnLoading | boolean  | optional    |
+| onReady          | function | optional    |
+| token            | string   | required    |
+
+---
+
 ## Features
 
 - Control Your Songs
