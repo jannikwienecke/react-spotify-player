@@ -2,6 +2,9 @@
 
 ## Player to control your spotify web application
 
+![alt text](https://github.com/jannikwienecke/react-spotify-player/blob/main/readme-images/standard.png)
+
+
 ## Usage
 
 ```jsx
@@ -49,6 +52,3 @@
 - Tests
 - Fix Deploy
 
-![alt text](https://github.com/[jannikwienecke]/[react-spotify-player]/blob/[main]/readme-images/standard.jpg)
-
-<!-- ![alt text](https://github.com/[jannikwienecke]/[react-spotify-player]/blob/[main]/image.jpg?raw=true) -->
