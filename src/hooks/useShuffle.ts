@@ -3,7 +3,7 @@ import { usePlayerStore } from './usePlayerStore'
 import { useSpotifyMutation } from './useSpotify'
 import { useValidMutation } from './useValidMutation'
 
-export const useRandom = () => {
+export const useShuffle = () => {
   const [url, setUrl] = React.useState('')
 
   const { toggleShuffle: toggleShuffleStore, isShuffle } = usePlayerStore()

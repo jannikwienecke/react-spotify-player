@@ -1,6 +1,5 @@
 import React from 'react'
 import tw from 'twin.macro'
-import { useLocalDeviceStore } from '../hooks/useLocalDeviceStore'
 import { useSpotifyPlayerSettings } from '../hooks/useSpotifyPlayerSettings'
 import { DeviceListBox } from './DeviceListBox'
 import { VolumeSlider } from './VolumeSlider'

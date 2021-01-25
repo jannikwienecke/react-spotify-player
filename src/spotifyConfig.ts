@@ -66,4 +66,4 @@ export interface URL_PARAMETER_REDIRECT_CODE {
   state: string
 }
 
-export const refetchIntervall = 5000
+export const refetchInterval = 5000

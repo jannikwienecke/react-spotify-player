@@ -5,7 +5,6 @@ import { useSpotifyMutation } from './useSpotify'
 import { useSpotifyToken } from './useSpotifyToken'
 import { useValidMutation } from './useValidMutation'
 
-// interface UsePlayInterface {}
 export const usePlayer = () => {
   const url = 'me/player'
 

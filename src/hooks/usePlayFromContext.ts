@@ -4,6 +4,8 @@ import { usePlayerStore } from './usePlayerStore'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
 import { useSpotifyMutation } from './useSpotify'
 
+// CHANGES THE TRACk -
+// BUT STAYS IN THE SAME CONTEXT - e.g. PLAYLIST
 export const usePlayFromContext = () => {
   const [uri, setUri] = React.useState<string | undefined>()
   const [url, setUrl] = React.useState<string>('')

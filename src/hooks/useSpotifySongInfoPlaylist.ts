@@ -45,26 +45,28 @@ export const useSpotifySongInfoPlaylist = () => {
     })
   }
 
-  const { value, handleChange } = useListBox({
-    listItems,
-    onChange: (activeItem: ListItem) => {
-      if (track?.item && track?.item.id === activeItem.id) {
-        playFromContext(track.item)
-      } else if (queue) {
-        let newTrack = queue.find(track => track.id === activeItem.id)
-        if (newTrack) playFromContext(newTrack)
-      } else if (previousPlayedTracks) {
-        let newTrack = previousPlayedTracks.find(
-          track => track.id === activeItem.id,
-        )
-        if (newTrack) playFromContext(newTrack)
-      }
-    },
-  })
-
   React.useEffect(() => {
     setListItems(_getListItems([...(previousPlayedTracks || []), ...queue]))
   }, [queue, previousPlayedTracks, track])
+
+  const playTrackFromPlaylist = (activeItem: ListItem) => {
+    if (track?.item && track?.item.id === activeItem.id) {
+      playFromContext(track.item)
+    } else if (queue) {
+      let newTrack = queue.find(track => track.id === activeItem.id)
+      if (newTrack) playFromContext(newTrack)
+    } else if (previousPlayedTracks) {
+      let newTrack = previousPlayedTracks.find(
+        track => track.id === activeItem.id,
+      )
+      if (newTrack) playFromContext(newTrack)
+    }
+  }
+
+  const { value, handleChange } = useListBox({
+    listItems,
+    onChange: playTrackFromPlaylist,
+  })
 
   return { value, listItems, handleChange }
 }

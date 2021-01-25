@@ -3,7 +3,6 @@ import React from 'react'
 import { useMe } from './useMe'
 import { useGetPlaylist } from './useGetPlaylist'
 import { useValidMutation } from './useValidMutation'
-import { usePlay } from './usePlay'
 import { usePlaylistStore } from './usePlaylistStore'
 import { useUnfollowPlaylist } from './useRemovePlaylist'
 import { usePlayPlaylist } from './usePlayPlaylist'
@@ -71,6 +70,8 @@ export const useCreatePlaylist = () => {
   React.useEffect(() => {
     if (playlist?.id) {
       setPlaylist(playlist)
+      // NEED TO UNFOLLOW - OTHERWISE THE USER WILL HAVE A NEW
+      // PLAYLIST SAVED IN HIS LIBRARY, HE HEARS A SONG RADIO
       unfollowPlaylist(playlist.id)
       playPlaylist(playlist.uri)
     }

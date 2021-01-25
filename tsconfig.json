@@ -15,24 +15,18 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
     "strict": true,
     "target": "esnext"
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"],
   "files": [
-    "twin.d.ts"
-    // "./src/components/DeviceListBox.tsx",
-    // "./src/components/useDeviceListBox.tsx",
-    // "./src/components/VolumeSlider.tsx",
-    // "./src/components/SongImagePlayer.tsx",
-    // "./src/components/SpotifySongInfoHeart.tsx",
-    // "src/hooks/useCurrentContext.ts",
-    // "./src/components/SpotifySongInfoRadio.tsx",
-    // "./src/hooks/usePlayerStore.ts",
-    // "./src/hooks/useHandlePlayerChanges.ts",
-    // "./src/components/SpotifySongInfoPlaylist.tsx",
-    // "./src/components/PlaylistButton.tsx",
-    // "./src/components/Alert.tsx"
+    "twin.d.ts",
+    "./src/components/ShufflePoint.tsx",
+    "./src/components/ErrorInvalidToken.tsx"
   ]
 }

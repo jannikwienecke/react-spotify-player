@@ -15,7 +15,6 @@ export const useSpotifyRadio = () => {
     recommendationsOptions: SpotifyApi.RecommendationsOptionsObject,
     newPlaylistOptions: PropsNewPlaylist,
   ) => {
-    console.log('Start new radio: ', newPlaylistOptions)
     setAction('opt_track_change')
     setLoading(true)
 

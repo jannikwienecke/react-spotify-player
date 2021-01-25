@@ -34,8 +34,6 @@ export const usePlay = () => {
       } else if (currentMs.current !== undefined) {
         mutate({ position_ms: currentMs.current })
       } else {
-        console.log('play - no arguments.')
-        // isResumeRef.current = true
         mutate({})
       }
       currentMs.current = 0

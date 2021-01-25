@@ -4,8 +4,7 @@ import NavPlayer from './components/NavPlayer'
 import './index.css'
 
 export const TEMP_TOkEN =
-  'BQDg94SfxP7Bus7QVKXF3JSm0cgl1CWdN5UlCBX5PoBBLIzq81RIcDkA03wLU8XbLbCSm_JJtfxgRPMMInf6xo8RvMzfKVkEAmNvoai6Kv9C8xSFpdt4EDbdCfnvkM0fPUyLwmZwAQ_hfmFp_Hl-LJWc4orSyrNLc-q-udDE58XrUClgeKgEI2V42KwZIlG9OLvNwn7IGmVmlNggtnJ-qCGqdyUMdwtpb4_H9tW-VHYens0m7Ta4sb5fCLI_tAZJ-VSZRksuZWG1ng6X'
-
+  'BQCOtuTJvuBrTf91JHjfMtINTYn9O6rN6lo8MQpX7iUP5AqxtlRlU79CASMuOW5L7xbT5wF5t24JnCiveGjn8Locmp0qpBJMXhCLLHQFJFaD4VWITtw56GkRCMj7JdykDkGm1LMF2zC7TThxWQd0xCmS7opF7RykcO2PBw2vb4n4YaxykNu61smapuvuyA_lc_dTdToAlxYgSL3t3i-HhHq2AaccuFxatX7Bc6KrYAabwioVpQyzq5feoHUFWZStiKbeAllb1xlifGMR'
 const App = () => {
   return (
     <div tw="h-screen bg-gray-200 flex flex-col justify-end">

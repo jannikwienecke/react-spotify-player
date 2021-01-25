@@ -3,7 +3,6 @@ import React from 'react'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
 import { usePlayerStore } from './usePlayerStore'
 
-// interface UsePlayInterface {}
 export const useSeekPosition = () => {
   const [url, setUrl] = React.useState('')
   const { setAction } = usePlayerStore()
@@ -14,8 +13,6 @@ export const useSeekPosition = () => {
   })
 
   useRefetchCurrentSong(result.status, () => {
-    console.log('set success ms change....')
-
     setAction('SUCCESS_MS_CHANGE')
   })
 

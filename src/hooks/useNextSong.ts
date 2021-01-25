@@ -1,11 +1,9 @@
 import _ from 'lodash'
 import React from 'react'
 import { usePlayerStore } from './usePlayerStore'
-import { usePlaylistStore } from './usePlaylistStore'
 import { useQueueStore } from './useQueueStore'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
 import { useSpotifyMutation } from './useSpotify'
-import { useSpotifyQueue } from './useSpotifyQueue'
 import { useSpotifyRadio } from './useSpotifyRadio'
 import { useTopArtistsTracks } from './useTopArtistsTracks'
 
@@ -36,7 +34,6 @@ export const useNext = () => {
 
   const playNextSong = React.useCallback(() => {
     setNext.current = true
-    console.log('contextUri', contextUri)
     if (contextUri) {
       const trackQueue = queue.find(track_ => track_.id === track?.item?.id)
       if (trackQueue) {
@@ -48,16 +45,12 @@ export const useNext = () => {
       pause()
       playNextTrack({})
     } else if (track) {
-      console.log('new RADIO START 1')
-
       setNewRadio(
         { seed_tracks: track.item?.id },
         { name: `Radio - ${track.item?.name}` },
       )
     } else {
       if (topTracks) {
-        console.log('new RADIO START 2')
-
         const newSong = _.shuffle(topTracks.items)[0]
         setNewRadio(
           { seed_tracks: newSong.id },
@@ -74,8 +67,6 @@ export const useNext = () => {
     if (!playTopTracks.current) return
 
     const newSong = _.shuffle(topTracks.items)[0]
-    console.log('new RADIO START 3')
-
     setNewRadio(
       { seed_tracks: newSong.id },
       { name: `Radio - ${newSong.name}` },

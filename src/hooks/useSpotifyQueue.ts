@@ -31,7 +31,6 @@ export const useSpotifyQueue = () => {
 
   React.useEffect(() => {
     if (!url) return
-    console.log('add to tqueue: ', url)
     mutate({})
   }, [url])
 

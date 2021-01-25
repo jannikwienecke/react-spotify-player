@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSpotify } from './useSpotify'
-import { refetchIntervall, SPOTIFY_PLAYER_NAME } from '../spotifyConfig'
+import { refetchInterval, SPOTIFY_PLAYER_NAME } from '../spotifyConfig'
 import { usePlayer } from './usePlayer'
 import { useLocalDeviceStore } from './useLocalDeviceStore'
 import { useValidMutation } from './useValidMutation'
@@ -14,7 +14,7 @@ export const useDevices = () => {
   const { deviceId, setDeviceIsReady } = useLocalDeviceStore()
   const { refetch, ...result } = useSpotify<devicesType>({
     url: devicesUrl,
-    refetchInterval: refetchIntervall,
+    refetchInterval: refetchInterval,
   })
 
   // WHEN PLAYBACk IS TRANSFERRED TO NEW DEVICE

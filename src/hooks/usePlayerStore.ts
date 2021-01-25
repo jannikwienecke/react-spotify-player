@@ -1,4 +1,3 @@
-import { StateSliderProps } from '@bit/jannikwienecke.personal.react-slider/dist/types'
 import create from 'zustand'
 import { immerMiddleware } from '../utils'
 
@@ -38,6 +37,7 @@ export type Player = {
   nextRepeatMode: repeatModes
   loadRadio: boolean
   setMs: (ms: number) => void
+  setRepeatState: (repeatState: repeatModes) => void
   updateRepeatMode: () => void
   setLoadRadio: (isLoading: boolean) => void
   toggleShuffle: () => void
@@ -47,8 +47,6 @@ export type Player = {
   play: () => void
   pause: () => void
   updatePlayer: () => void
-  setGetStateFunc: (func: () => StateSliderProps) => void
-  getStateFunc: () => StateSliderProps
   track: SpotifyApi.CurrentPlaybackResponse | undefined
   nextTrack: SpotifyApi.TrackObjectFull | undefined
   setTrack: (track: SpotifyApi.CurrentPlaybackResponse | undefined) => void
@@ -70,6 +68,18 @@ export const usePlayerStore = create<Player>(
     isShuffle: false,
     repeatMode: 'off',
     nextRepeatMode: 'track',
+    contextUri: '',
+    trackIdPrev: '',
+    setRepeatState: repeatState => {
+      set(state => void (state.repeatMode = repeatState))
+      set(
+        state =>
+          void (state.nextRepeatMode =
+            REPEAT_MODES[
+              (REPEAT_MODES.indexOf(state.repeatMode) + 1) % REPEAT_MODES.length
+            ]),
+      )
+    },
     updateRepeatMode: () => {
       set(
         state =>
@@ -86,8 +96,6 @@ export const usePlayerStore = create<Player>(
             ]),
       )
     },
-    getStateFunc: () => {},
-    setGetStateFunc: func => set(state => void (state.getStateFunc = func)),
     setMs: ms => set(state => void (state.currentMs = ms)),
     setLoadRadio: isLoading => set(state => void (state.loadRadio = isLoading)),
     setTrackIdPrev: trackIdPrev =>

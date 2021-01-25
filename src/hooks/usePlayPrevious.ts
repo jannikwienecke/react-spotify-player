@@ -1,7 +1,4 @@
 import React from 'react'
-import { useDevices } from './useDevices'
-import { useLocalDeviceStore } from './useLocalDeviceStore'
-import { usePlay } from './usePlay'
 import { usePlayerStore } from './usePlayerStore'
 import { usePlayFromContext } from './usePlayFromContext'
 import { useRefetchCurrentSong } from './useRefetchCurrentSong'
@@ -32,15 +29,13 @@ export const usePlayPrevious = () => {
   }, [track])
 
   React.useEffect(() => {
-    console.log('error:', error)
     if (!error) return
 
+    const err: any = error
     // IF PRESS PREVIOUS - BUT NO PREVIOUS TRACk
     // THEN PLAY SAME SONG FROM START
-    if (error.error.status === 403 && track?.item) {
-      console.log('play.... set 0 ')
+    if (err.error.status === 403 && track?.item) {
       playFromContext(track?.item)
-      // setAction('opt_previous_track')
       setAction('SUCCESS_PREVIOUS_TRACK')
     }
   }, [error])

@@ -2,11 +2,11 @@ import React from 'react'
 import 'twin.macro'
 import tw from 'twin.macro'
 import { useAlertStore } from '../hooks/useAlertStore'
-import { useDevices } from '../hooks/useDevices'
 import { useSpotifyPlayer } from '../hooks/useSpotifyPlayer'
 import { useSpotifyToken } from '../hooks/useSpotifyToken'
 import { Alert } from './Alert'
 import { BarRemotePlayer } from './BarRemotePlayer'
+import { ErrorInvalidToken } from './ErrorInvalidToken'
 import Modal from './Modal'
 import { PlayerControl } from './PlayerControl'
 import { MusicSlider } from './Slider'
@@ -29,31 +29,14 @@ const SpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
   visibleOnLoading = false,
   token,
 }) => {
-  const {
-    handleClickPlay,
-    handleClickPause,
-    handleClickNext,
-    handleClickPrevious,
-    handleClickShuffle,
-    handleClickRepeat,
-    fetchCurrentSong,
-
-    isLoading,
-  } = useSpotifyPlayer({ onReady })
-
-  const { alert } = useAlertStore()
-  const { setToken } = useSpotifyToken()
-
+  const { isLoading } = useSpotifyPlayer({ onReady, token })
   const playerRef = React.useRef<HTMLDivElement>(null)
+  const { alert } = useAlertStore()
+  const { tokenIsInvalid } = useSpotifyToken()
 
-  React.useEffect(() => {
-    if (!token) {
-      console.error('NO TOKEN PROVIDED')
-    } else {
-      setToken(token)
-    }
-  }, [token])
-
+  if (tokenIsInvalid) {
+    return <ErrorInvalidToken />
+  }
   return (
     <>
       <div
@@ -67,22 +50,11 @@ const SpotifyPlayer: React.FC<PropsSpotifyPlayer> = ({
 
           <WrapperMainPlayer>
             <WrapperControl>
-              <PlayerControl
-                handleClickPlay={handleClickPlay}
-                handleClickPause={handleClickPause}
-                handleClickNext={handleClickNext}
-                handleClickPrevious={handleClickPrevious}
-                handleClickShuffle={handleClickShuffle}
-                handleClickRepeat={handleClickRepeat}
-                isLoading={isLoading}
-              />
+              <PlayerControl isLoading={isLoading} />
             </WrapperControl>
 
             <WrapperProgressBar>
-              <MusicSlider
-                fetchCurrentSong={fetchCurrentSong}
-                handleClickNext={handleClickNext}
-              />
+              <MusicSlider />
             </WrapperProgressBar>
           </WrapperMainPlayer>
 

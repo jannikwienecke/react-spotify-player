@@ -2,111 +2,52 @@ import React from 'react'
 import { useQueryClient } from 'react-query'
 import { useCurrentContext } from './useCurrentContext'
 import { currentSongUrl, useCurrentSong } from './useCurrentSong'
-import { useDevices } from './useDevices'
 import { useLocalDeviceStore } from './useLocalDeviceStore'
 import { useNext } from './useNextSong'
-import { usePause } from './usePause'
-import { usePlay } from './usePlay'
 import { usePlayerStore } from './usePlayerStore'
-import { usePlayFromContext } from './usePlayFromContext'
-import { usePlayPrevious } from './usePlayPrevious'
-import { usePreloadFullTracks } from './usePreloadFullTracks'
-import { useQueueStore } from './useQueueStore'
-import { useRandom } from './useRandom'
-import { useRepeat } from './useRepeat'
+import { useInitializeSpotify } from './useInitialSpotify'
+import { useSpotifyPlayerSettings } from './useSpotifyPlayerSettings'
 import { useSpotifyToken } from './useSpotifyToken'
 
-export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
-  const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
-  useCurrentContext()
-  const { queue } = useQueueStore()
-  const {
-    play,
-    pause,
-    setTrack,
-    setAction,
-    track,
-    setLoading,
-    isPlaying,
-  } = usePlayerStore()
-  const { play: playSongs } = usePlay()
-  const { playFromContext } = usePlayFromContext()
-  const { pause: pauseSong } = usePause()
-  const { playNextSong } = useNext()
-  const { playPreviousTrack } = usePlayPrevious()
-  const queryClient = useQueryClient()
-  const { token } = useSpotifyToken()
-  const { firstTrackId } = usePlayerStore()
-  const { getActiveDeviceId } = useDevices()
-  const { deviceIsReady, deviceId } = useLocalDeviceStore()
+interface PropsUseSpotifyPlayer {
+  onReady?: () => void
+  token: string
+}
+export const useSpotifyPlayer = ({ onReady, token }: PropsUseSpotifyPlayer) => {
   const [isLoading, setIsLoading] = React.useState(true)
+
   const isReady = React.useRef(false)
-  const { toggleShuffle } = useRandom()
-  const { updateRepeatMode } = useRepeat()
-  usePreloadFullTracks()
-
-  const handleClickPlay = () => {
-    pauseRef.current = false
-    if (track) {
-      setAction('opt_play')
-      setLoading(true)
-      playSongs()
-    } else {
-      console.log('play next songs')
-      playNextSong()
-    }
-  }
-
-  const pauseRef = React.useRef(false)
-  const handleClickPause = () => {
-    setAction('opt_pause')
-    setLoading(true)
-    pauseSong()
-    pauseRef.current = true
-    setTimeout(() => {
-      pauseRef.current = false
-    }, 3000)
-  }
-
-  const handleClickNext = () => {
-    setAction('opt_next_track')
-    setLoading(true)
-    playNextSong()
-  }
-
-  const handleClickPrevious = () => {
-    if (!track?.item) return
-
-    const playingOnThisPlayer = deviceId === getActiveDeviceId()
-    const playSameTrackFromStart =
-      track?.progress_ms && track?.progress_ms > 5000
-
-    if (
-      (playingOnThisPlayer && track?.item?.id === firstTrackId) ||
-      playSameTrackFromStart
-    ) {
-      playFromContext(track?.item)
-    } else {
-      setAction('opt_previous_track')
-      setLoading(true)
-      playPreviousTrack()
-    }
-  }
-
-  const handleClickShuffle = () => {
-    toggleShuffle()
-  }
-  const handleClickRepeat = () => {
-    console.log('repeat...')
-    updateRepeatMode()
-  }
-
   const hasCurrentSongRef = React.useRef<boolean>(false)
-  React.useEffect(() => {
-    if (pauseRef.current) {
-      return
-    }
+  const intervalRef = React.useRef<number>()
 
+  const { playNextSong } = useNext()
+  const queryClient = useQueryClient()
+  const { setToken } = useSpotifyToken()
+  const { deviceIsReady, deviceId } = useLocalDeviceStore()
+  const { play, pause, setTrack, track } = usePlayerStore()
+  const { data: currentSong, refetch: fetchCurrentSong } = useCurrentSong()
+  const { tokenIsInvalid } = useSpotifyToken()
+
+  useInitializeSpotify()
+  useCurrentContext()
+  useSpotifyPlayerSettings()
+
+  React.useEffect(() => {
+    if (!token) {
+      console.error('NO TOKEN PROVIDED')
+      window.alert('You must provide a valid token')
+    } else {
+      setToken(token)
+    }
+  }, [token])
+
+  React.useEffect(() => {
+    if (tokenIsInvalid) {
+      window.alert('Your Token is Invalid')
+    }
+  }, [tokenIsInvalid])
+
+  React.useEffect(() => {
     if (currentSong) {
       hasCurrentSongRef.current = true
       clearInterval(intervalRef.current)
@@ -116,7 +57,6 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
 
   React.useEffect(() => {
     if (!deviceIsReady) return
-
     if (currentSong?.is_playing) {
       play()
     } else {
@@ -139,7 +79,6 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
     }, 300)
   }, [currentSong?.item?.id])
 
-  const intervalRef = React.useRef<number>()
   React.useEffect(() => {
     if (!deviceIsReady) return
     if (!intervalRef.current) return
@@ -150,13 +89,13 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
       }
       clearInterval(intervalRef.current)
       intervalRef.current = 0
-    }, 800)
+    }, 1000)
   }, [deviceIsReady])
 
   const fetchCurrentSongInterval = () => {
     intervalRef.current = window.setInterval(async () => {
       refetchCurrentSong()
-    }, 100)
+    }, 200)
   }
 
   const refetchCurrentSong = async () => {
@@ -173,6 +112,7 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
     fetchCurrentSongInterval()
   }, [])
 
+  // CHECk IF PLAYER IS READY
   React.useEffect(() => {
     if (deviceId && deviceIsReady && track && !isReady.current) {
       isReady.current = true
@@ -182,16 +122,6 @@ export const useSpotifyPlayer = ({ onReady }: { onReady?: () => void }) => {
   }, [deviceIsReady, deviceId, track])
 
   return {
-    handleClickPlay,
-    handleClickPause,
-    handleClickNext,
-    handleClickPrevious,
-    handleClickShuffle,
-    handleClickRepeat,
-    fetchCurrentSong,
-    queue,
     isLoading,
-    track,
-    isPlaying,
   }
 }

@@ -2,6 +2,7 @@
 import React from 'react'
 import { SPOTIFY_PLAYER_NAME } from '../spotifyConfig'
 import { useLocalDeviceStore } from './useLocalDeviceStore'
+import { useSpotifyToken } from './useSpotifyToken'
 
 declare global {
   interface Window {
@@ -12,9 +13,10 @@ declare global {
   }
 }
 
-export const useSpotify = () => {
+export const useInitializeSpotify = () => {
   const [spotifyContext, setSpotifyContext] = React.useState()
   const { setDeviceId } = useLocalDeviceStore()
+  const { token, setTokenIsInvalid } = useSpotifyToken()
 
   const initSpotifyPlayer = (token: string) => {
     const script = document.createElement('script')
@@ -40,7 +42,10 @@ export const useSpotify = () => {
       player.addListener(
         'authentication_error',
         ({ message }: { message: string }) => {
+          console.log('error..')
+
           console.error('authentication_error: ', message)
+          setTokenIsInvalid(true)
         },
       )
       player.addListener(
@@ -66,10 +71,12 @@ export const useSpotify = () => {
         console.log('Device ID has gone offline', device_id)
       })
 
-      // Connect to the player!
       player.connect()
     }
   }
 
-  return initSpotifyPlayer
+  React.useEffect(() => {
+    if (!token) return
+    initSpotifyPlayer(token)
+  }, [token])
 }
